@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script type="text/javascript">
+
+    window.onload = function () {
+        document.getElementById("username").value = "1111";
+    }
+    // 两秒后模拟点击
+   /* setTimeout(function () {
+        document.getElementsByName("username").value = "1111"
+        //     // IE
+        //     if (document.all) {
+        //         document.getElementById("clickMe").click();
+        //
+        //     }
+        //     // 其它浏览器
+        //     else {
+        //         var e = document.createEvent("MouseEvents");
+        //         e.initEvent("click", true, true);
+        //         document.getElementById("clickMe").dispatchEvent(e);
+        //     }
+    }, 2000);*/
+
+
+</script>
+<body>
+
+<h2>Log In Here!</h2>
+Warning: Your browser must be able to use cookies in order to view our site!
+<form method="post" action="welcome.php">
+    Username (use anything!): <input type="text" name="username" id="username"><br>
+    Password (try "password"): <input type="password" name="password"><br>
+    <input type="submit" value="Login">
+</form>
+</body>
+</html>
