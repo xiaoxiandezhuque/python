@@ -4,7 +4,6 @@
 import re
 
 if __name__ == '__main__':
-    text = set(['1', '2'])
-    text.add("a")
-    text = text | set(["aa", 'bb'])
-    print(text)
+    a = 'aa"sdhas"'
+    a = a.replace("\"",'')
+    print(a)

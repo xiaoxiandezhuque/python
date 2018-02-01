@@ -939,7 +939,7 @@
     </column>
     <column id="237" parent="231" name="title">
       <Position>2</Position>
-      <DataType>varchar(30)|0</DataType>
+      <DataType>varchar(100)|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
     <column id="238" parent="231" name="money">
@@ -1007,139 +1007,154 @@
       <DataType>int(11)|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="251" parent="231" name="job_zl_id_uindex">
+    <column id="251" parent="231" name="company_people">
+      <Position>16</Position>
+      <DataType>varchar(30)|0</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="252" parent="231" name="company_nature">
+      <Position>17</Position>
+      <DataType>varchar(20)|0</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="253" parent="231" name="company_industry">
+      <Position>18</Position>
+      <DataType>varchar(30)|0</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="254" parent="231" name="job_zl_id_uindex">
       <ColNames>zl_id</ColNames>
       <Unique>1</Unique>
     </index>
-    <key id="252" parent="231" name="PRIMARY">
+    <key id="255" parent="231" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="253" parent="231" name="job_zl_id_uindex">
+    <key id="256" parent="231" name="job_zl_id_uindex">
       <ColNames>zl_id</ColNames>
       <UnderlyingIndexName>job_zl_id_uindex</UnderlyingIndexName>
     </key>
-    <column id="254" parent="232" name="id">
+    <column id="257" parent="232" name="id">
       <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="255" parent="232" name="title">
+    <column id="258" parent="232" name="title">
       <Position>2</Position>
       <DataType>varchar(20)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="256" parent="232" name="movieInfo">
+    <column id="259" parent="232" name="movieInfo">
       <Position>3</Position>
       <DataType>text|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="257" parent="232" name="url">
+    <column id="260" parent="232" name="url">
       <Position>4</Position>
       <DataType>varchar(200)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="258" parent="232" name="score">
+    <column id="261" parent="232" name="score">
       <Position>5</Position>
       <DataType>varchar(10)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="259" parent="232" name="time">
+    <column id="262" parent="232" name="time">
       <Position>6</Position>
       <DataType>time|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="260" parent="232" name="PRIMARY">
+    <key id="263" parent="232" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="261" parent="233" name="id">
+    <column id="264" parent="233" name="id">
       <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="262" parent="233" name="name">
+    <column id="265" parent="233" name="name">
       <Position>2</Position>
       <DataType>varchar(20)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="263" parent="233" name="name">
+    <index id="266" parent="233" name="name">
       <ColNames>name</ColNames>
       <Unique>1</Unique>
     </index>
-    <key id="264" parent="233" name="PRIMARY">
+    <key id="267" parent="233" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="265" parent="233" name="name">
+    <key id="268" parent="233" name="name">
       <ColNames>name</ColNames>
       <UnderlyingIndexName>name</UnderlyingIndexName>
     </key>
-    <column id="266" parent="234" name="id">
+    <column id="269" parent="234" name="id">
       <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="267" parent="234" name="name">
+    <column id="270" parent="234" name="name">
       <Position>2</Position>
       <DataType>varchar(20)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="268" parent="234" name="url">
+    <column id="271" parent="234" name="url">
       <Position>3</Position>
       <DataType>varchar(100)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="269" parent="234" name="newAddress">
+    <column id="272" parent="234" name="newAddress">
       <Position>4</Position>
       <DataType>varchar(200)|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="270" parent="234" name="PRIMARY">
+    <key id="273" parent="234" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="271" parent="235" name="id">
+    <column id="274" parent="235" name="id">
       <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="272" parent="235" name="url">
+    <column id="275" parent="235" name="url">
       <Position>2</Position>
       <DataType>varchar(255)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="273" parent="235" name="zhiliandetailurls_url_uindex">
+    <index id="276" parent="235" name="zhiliandetailurls_url_uindex">
       <ColNames>url</ColNames>
       <Unique>1</Unique>
     </index>
-    <key id="274" parent="235" name="PRIMARY">
+    <key id="277" parent="235" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="275" parent="235" name="zhiliandetailurls_url_uindex">
+    <key id="278" parent="235" name="zhiliandetailurls_url_uindex">
       <ColNames>url</ColNames>
       <UnderlyingIndexName>zhiliandetailurls_url_uindex</UnderlyingIndexName>
     </key>
