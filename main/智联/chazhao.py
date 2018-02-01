@@ -66,7 +66,8 @@ def lookUp():
             mysqlutil.addDetailUrls(urlsSet)
             urlsSet.clear()
             sleepLittle()
-
+        else:
+            return
 
 def getDicJob(html):
     dic_detail = {'title': html.xpath("//h1/text()")[0]}
