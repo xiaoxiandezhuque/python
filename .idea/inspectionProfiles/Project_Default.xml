@@ -7,6 +7,8 @@
           <option value="mysqlutil" />
           <option value="util" />
           <option value="win32api" />
+          <option value="findpic" />
+          <option value="adbshell" />
         </list>
       </option>
     </inspection_tool>
