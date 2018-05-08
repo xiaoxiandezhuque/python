@@ -9,6 +9,12 @@
           <option value="win32api" />
           <option value="findpic" />
           <option value="adbshell" />
+          <option value="mouseOperation" />
+          <option value="win32con" />
+          <option value="contrast_color" />
+          <option value="main.pc.contrast_color.beadEnum" />
+          <option value="main.pc.main.*" />
+          <option value="Bead" />
         </list>
       </option>
     </inspection_tool>
