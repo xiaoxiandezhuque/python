@@ -235,9 +235,13 @@ beginX, beginY = 0, 0
 # 公主技能打的点
 gongzhupoint1, gongzhupoint2 = False, False
 
+count_no_bead = 0
+count_games = 0
+
 
 def beginGame():
     global cPoint, replaceSet5, replaceSet4, replaceSet3, beginX, beginY, gongzhupoint1, gongzhupoint2
+    global count_no_bead, count_games
     while True:
         try:
             Image.open("newpic.png").save("oldpic.png")
@@ -246,7 +250,7 @@ def beginGame():
         replaceSet5.clear()
         replaceSet4.clear()
         replaceSet3.clear()
-        sleepLong()
+
         gameLoc = findWinLoc("gemsofwar")
         # print("游戏窗口的位置 ")
         # print(gameLoc)
@@ -266,34 +270,45 @@ def beginGame():
         btnNext = findpic.getLoc("newpic.png", "next0.png")
         if btnNext:
             downPoint(btnNext)
+            sleepLong()
             continue
         btnNext = findpic.getLoc("newpic.png", "next2.png")
         if btnNext:
             downPoint(btnNext)
+            sleepShort()
             continue
         btnNext = findpic.getLoc("newpic.png", "next3.png")
         if btnNext:
             downPoint(btnNext)
             gongzhupoint1 = False
             gongzhupoint2 = False
+            count_games += 1
+            print("游戏次数%s" % (count_games))
+            sleepLong()
             continue
         btnNext = findpic.getLoc("newpic.png", "next4.png")
         if btnNext:
             downPoint(btnNext)
             sleepLong()
+            sleepLong()
             continue
         btnNext = findpic.getLoc("newpic.png", "next5.png")
         if btnNext:
             downPoint(btnNext)
-            sleepLong()
+            sleepShort()
             continue
 
         # 看看图有没有进入消除界面
         if findpic.getLoc("newpic.png", "other.png"):
+            count_no_bead = 0
             pass
         else:
+            count_no_bead += 1
             print("画面中没有珠子")
+            if count_no_bead >= 9:
+                exit("连续没有珠子的次数太多，退出")
             downPoint((gameLoc[0] + random.randrange(450, 600), gameLoc[1] + random.randrange(200, 500)))
+            sleepLong()
             continue
 
         # 判断是否有技能
@@ -310,6 +325,7 @@ def beginGame():
 
             else:
                 print("没有出现施法按钮")
+            sleepLong()
             continue
         # 公主的技能
         skillPointGongzhu = findpic.getLoc("newpic.png", "gongzhu.png")
@@ -330,6 +346,7 @@ def beginGame():
                     downPoint((gameLoc[0] + random.randrange(60, 130), gameLoc[1] + random.randrange(350, 450)))
             else:
                 print("没有出现施法按钮")
+            sleepLong()
             continue
 
         srcImage = Image.open("newpic.png")
@@ -391,10 +408,12 @@ def beginGame():
         replacePoint5 = findColorsReplacePoint(replaceSet5, findcolors)
         if replacePoint5:
             movePoint(replacePoint5)
+            sleepLong()
             continue
         replacePoint4 = findColorsReplacePoint(replaceSet4, findcolors)
         if replaceSet4:
             movePoint(replacePoint4)
+            sleepLong()
             continue
 
         # 卡组的技能
@@ -403,6 +422,7 @@ def beginGame():
         replacePoint3 = findColorsReplacePoint(replaceSet3, findcolors)
         if replacePoint3:
             movePoint(replacePoint3)
+            sleepLong()
             continue
 
 
