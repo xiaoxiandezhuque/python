@@ -1,3 +1,5 @@
+from builtins import print
+
 import autopy
 import win32api
 import win32gui
@@ -36,15 +38,18 @@ def findWinLoc(name):
 
 
 def print4(i, j, locstr):
-    print("位置(%s,%s)有4连以上（包括4）,这个点换%s面的点" % (i, j, locstr))
+    # print("位置(%s,%s)有4连以上（包括4）,这个点换%s面的点" % (i, j, locstr))
+    pass
 
 
 def print3(i, j, locstr):
-    print("位置(%s,%s)有3连,这个点换%s面的点" % (i, j, locstr))
+    # print("位置(%s,%s)有3连,这个点换%s面的点" % (i, j, locstr))
+    pass
 
 
 # 找 34连   返回一个集合
 def find345(beadList):
+    global replaceSet4, replaceSet3
     for i in range(8):
         for j in range(8):
             lColor, rColor, tColor, bColor = False, False, False, False
@@ -143,6 +148,7 @@ def find345(beadList):
 
 # 根据4连找5连
 def find5(beadList):
+    global replaceSet5, replaceSet4
     if replaceSet4:
         for c in replaceSet4:
             color, x, y = c.color, c.fromPoint.x, c.fromPoint.y
@@ -189,15 +195,17 @@ def findColorsReplacePoint(replaceSet, colors):
 
 
 def movePoint(replacePoint):
-    print("移动点（%s，%s）到（%s，%s），颜色是%s"
-          % (replacePoint.fromPoint.x, replacePoint.fromPoint.y, replacePoint.toPoint.x, replacePoint.toPoint.y,
-             replacePoint.color))
-    autopy.mouse.smooth_move(beginX + replacePoint.fromPoint.x * 59 + random.randrange(10, 50),
-                             beginY + replacePoint.fromPoint.y * 59 + random.randrange(10, 50))
+    # print("移动点（%s，%s）到（%s，%s），颜色是%s"
+    #       % (replacePoint.fromPoint.x, replacePoint.fromPoint.y, replacePoint.toPoint.x, replacePoint.toPoint.y,
+    #          replacePoint.color))
+    global beginX, beginY
+
+    autopy.mouse.smooth_move(beginX + replacePoint.fromPoint.x * 59 + random.randrange(10, 40),
+                             beginY + replacePoint.fromPoint.y * 59 + random.randrange(10, 40))
     autopy.mouse.toggle(Button.LEFT, True)
     time.sleep(random.randrange(300, 1000) / 1000)
-    autopy.mouse.smooth_move(beginX + replacePoint.toPoint.x * 59 + random.randrange(10, 50),
-                             beginY + replacePoint.toPoint.y * 59 + random.randrange(10, 50))
+    autopy.mouse.smooth_move(beginX + replacePoint.toPoint.x * 59 + random.randrange(10, 40),
+                             beginY + replacePoint.toPoint.y * 59 + random.randrange(10, 40))
     time.sleep(random.randrange(100, 300) / 1000)
     autopy.mouse.toggle(Button.LEFT, False)
     pass
@@ -215,7 +223,7 @@ def sleepShort():
 
 
 def sleepLong():
-    time.sleep(random.randrange(2000, 4000) / 1000)
+    time.sleep(random.randrange(5000, 8000) / 1000)
 
 
 replaceSet5 = set()
@@ -224,25 +232,36 @@ replaceSet3 = set()
 cPoint = (172 + 15, 103 + 15)
 
 beginX, beginY = 0, 0
+# 公主技能打的点
+gongzhupoint1, gongzhupoint2 = False, False
 
 
 def beginGame():
+    global cPoint, replaceSet5, replaceSet4, replaceSet3, beginX, beginY, gongzhupoint1, gongzhupoint2
     while True:
         try:
             Image.open("newpic.png").save("oldpic.png")
         except FileNotFoundError as e:
             print("没有找到之前的图片")
-
+        replaceSet5.clear()
+        replaceSet4.clear()
+        replaceSet3.clear()
         sleepLong()
-        gameLoc = findWinLoc("霸气群名")
-        print("游戏窗口的位置 ")
-        print(gameLoc)
+        gameLoc = findWinLoc("gemsofwar")
+        # print("游戏窗口的位置 ")
+        # print(gameLoc)
         autopy.bitmap.capture_screen().save("newpic.png")
 
-        if findpic.getLoc("newpic.png", "oldpic.png"):
-            print("之前和现在的界面一样")
-            downPoint((gameLoc[0] + random.randrange(450, 600), gameLoc[1] + random.randrange(200, 500)))
-            continue
+        #  这里有点小问题
+        # if findpic.getLoc("newpic.png", "oldpic.png"):
+        #     print("之前和现在的界面一样")
+        # downPoint((gameLoc[0] + random.randrange(450, 600), gameLoc[1] + random.randrange(200, 500)))
+        # continue
+
+        btnNext = findpic.getLoc("newpic.png", "again.png")
+        if btnNext:
+            sleepLong()
+            sleepLong()
 
         btnNext = findpic.getLoc("newpic.png", "next0.png")
         if btnNext:
@@ -252,13 +271,65 @@ def beginGame():
         if btnNext:
             downPoint(btnNext)
             continue
+        btnNext = findpic.getLoc("newpic.png", "next3.png")
+        if btnNext:
+            downPoint(btnNext)
+            gongzhupoint1 = False
+            gongzhupoint2 = False
+            continue
+        btnNext = findpic.getLoc("newpic.png", "next4.png")
+        if btnNext:
+            downPoint(btnNext)
+            sleepLong()
+            continue
+        btnNext = findpic.getLoc("newpic.png", "next5.png")
+        if btnNext:
+            downPoint(btnNext)
+            sleepLong()
+            continue
 
         # 看看图有没有进入消除界面
         if findpic.getLoc("newpic.png", "other.png"):
             pass
         else:
             print("画面中没有珠子")
-            # 找一找图片中的各种按钮图片 并点击一下
+            downPoint((gameLoc[0] + random.randrange(450, 600), gameLoc[1] + random.randrange(200, 500)))
+            continue
+
+        # 判断是否有技能
+        # 龙魂的技能
+        skillPointLonghun = findpic.getLoc("newpic.png", "longhun.png")
+        if skillPointLonghun:
+            downPoint(skillPointLonghun)
+            sleepShort()
+            autopy.bitmap.capture_screen().save("newpic.png")
+            btnNext = findpic.getLoc("newpic.png", "next1.png")
+            if btnNext:
+                sleepShort()
+                downPoint(btnNext)
+
+            else:
+                print("没有出现施法按钮")
+            continue
+        # 公主的技能
+        skillPointGongzhu = findpic.getLoc("newpic.png", "gongzhu.png")
+        if skillPointGongzhu and (not gongzhupoint1 or not gongzhupoint2):
+            downPoint(skillPointGongzhu)
+            sleepShort()
+            autopy.bitmap.capture_screen().save("newpic.png")
+            btnNext = findpic.getLoc("newpic.png", "next1.png")
+            if btnNext:
+                sleepShort()
+                downPoint(btnNext)
+                sleepShort()
+                if not gongzhupoint2:
+                    gongzhupoint2 = True
+                    downPoint((gameLoc[0] + random.randrange(60, 130), gameLoc[1] + random.randrange(480, 580)))
+                else:
+                    gongzhupoint1 = True
+                    downPoint((gameLoc[0] + random.randrange(60, 130), gameLoc[1] + random.randrange(350, 450)))
+            else:
+                print("没有出现施法按钮")
             continue
 
         srcImage = Image.open("newpic.png")
@@ -290,16 +361,32 @@ def beginGame():
                 # print(color)
                 # if baseBeadList[i][j] == color:
                 beadList[i][j] = color
+
+                # if i==2 and j==5:
+                #     print((beginX + 59 * i, beginY + 59 * j))
+                #     print(pointColor)
+                # if i==3 and j==7:
+                #     print((beginX + 59 * i, beginY + 59 * j))
+                #     print(pointColor)
                 # else:
                 #     print("位置是%s,%s，点颜色%s,识别出来的颜色%s,应该是的颜色%s" % (i, j, pointColor, color, baseBeadList[i][j]))
 
                 # if color == "RED":
                 #     beads[i][j] = Bead.red
         # print(contrast_color.get_color(c))
+        # print(beadList[0])
+        # print(beadList[1])
+        # print(beadList[2])
+        # print(beadList[3])
+        # print(beadList[4])
+        # print(beadList[5])
+        # print(beadList[6])
+        # print(beadList[7])
+        # exit()
 
         # 卡组消除的颜色顺序
-        findcolors = [Bead.other, Bead.red, Bead.yellow, Bead.bule]
-
+        findcolors = [Bead.other, Bead.purple, Bead.red]
+        find345(beadList)
         # 先消除4  5连击
         replacePoint5 = findColorsReplacePoint(replaceSet5, findcolors)
         if replacePoint5:
@@ -310,51 +397,14 @@ def beginGame():
             movePoint(replacePoint4)
             continue
 
-        # 判断是否有技能
-        # 龙魂的技能
-        skillPointLonghun = findpic("newpic.png", "longhun.png")
-        if skillPointLonghun:
-            downPoint(skillPointLonghun)
-            btnNext = findpic.getLoc("newpic.png", "next1.png")
-            if btnNext:
-                sleepShort()
-                downPoint(btnNext)
-
-            else:
-                print("没有出现施法按钮")
-            continue
-        # 公主的技能
-        skillPointGongzhu = findpic("newpic.png", "gongzhu.png")
-        if skillPointGongzhu:
-            downPoint(skillPointGongzhu)
-            btnNext = findpic.getLoc("newpic.png", "next1.png")
-            if btnNext:
-                sleepShort()
-                downPoint(btnNext)
-                sleepShort()
-                if not gongzhupoint2:
-                    gongzhupoint2 = (gameLoc[0] + random.randrange(60, 130), gameLoc(1) + random.randrange(480, 580))
-                    downPoint(gongzhupoint2)
-
-                elif not gongzhupoint1:
-                    gongzhupoint1 = (gameLoc[0] + random.randrange(60, 130), gameLoc(1) + random.randrange(350, 450))
-                    downPoint(gongzhupoint1)
-            else:
-                print("没有出现施法按钮")
-            continue
-
         # 卡组的技能
-        transitionList = skill.colorTransition(beadList, Bead.red, Bead.bule)
-
-        find345(beadList)
+        # transitionList = skill.colorTransition(beadList, Bead.red, Bead.bule)
 
         replacePoint3 = findColorsReplacePoint(replaceSet3, findcolors)
         if replacePoint3:
             movePoint(replacePoint3)
+            continue
 
-
-# 公主技能打的点
-gongzhupoint1, gongzhupoint2 = False, False
 
 if __name__ == "__main__":
     beginGame()
