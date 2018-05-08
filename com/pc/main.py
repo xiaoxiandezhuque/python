@@ -4,12 +4,17 @@ import win32gui
 import win32con
 from PIL import Image
 
-import findpic
+from com.pc import findpic
 import contrast_color
 from Bead import Bead
 
+from com.pc import skill
 from com.pc.bean import Point
 from com.pc.bean import ReplacePoint
+import autopy
+from autopy.mouse import Button
+import time
+import random
 
 
 def findWinLoc(name):
@@ -26,7 +31,7 @@ def findWinLoc(name):
             or window_bottom > screen_height:
         exit("窗口最小化或者超出当前屏幕，请重新调整窗口的位子")
     loc = (window_left, window_top, window_right, window_bottom)
-    print(loc)
+
     return loc
 
 
@@ -187,68 +192,169 @@ def movePoint(replacePoint):
     print("移动点（%s，%s）到（%s，%s），颜色是%s"
           % (replacePoint.fromPoint.x, replacePoint.fromPoint.y, replacePoint.toPoint.x, replacePoint.toPoint.y,
              replacePoint.color))
+    autopy.mouse.smooth_move(beginX + replacePoint.fromPoint.x * 59 + random.randrange(10, 50),
+                             beginY + replacePoint.fromPoint.y * 59 + random.randrange(10, 50))
+    autopy.mouse.toggle(Button.LEFT, True)
+    time.sleep(random.randrange(300, 1000) / 1000)
+    autopy.mouse.smooth_move(beginX + replacePoint.toPoint.x * 59 + random.randrange(10, 50),
+                             beginY + replacePoint.toPoint.y * 59 + random.randrange(10, 50))
+    time.sleep(random.randrange(100, 300) / 1000)
+    autopy.mouse.toggle(Button.LEFT, False)
     pass
+
+
+def downPoint(point):
+    autopy.mouse.smooth_move(point[0], point[1])
+    autopy.mouse.toggle(Button.LEFT, True)
+    time.sleep(random.randrange(100, 300) / 1000)
+    autopy.mouse.toggle(Button.LEFT, False)
+
+
+def sleepShort():
+    time.sleep(random.randrange(1000, 2000) / 1000)
+
+
+def sleepLong():
+    time.sleep(random.randrange(2000, 4000) / 1000)
 
 
 replaceSet5 = set()
 replaceSet4 = set()
 replaceSet3 = set()
+cPoint = (172 + 15, 103 + 15)
+
+beginX, beginY = 0, 0
+
+
+def beginGame():
+    while True:
+        try:
+            Image.open("newpic.png").save("oldpic.png")
+        except FileNotFoundError as e:
+            print("没有找到之前的图片")
+
+        sleepLong()
+        gameLoc = findWinLoc("霸气群名")
+        print("游戏窗口的位置 ")
+        print(gameLoc)
+        autopy.bitmap.capture_screen().save("newpic.png")
+
+        if findpic.getLoc("newpic.png", "oldpic.png"):
+            print("之前和现在的界面一样")
+            downPoint((gameLoc[0] + random.randrange(450, 600), gameLoc[1] + random.randrange(200, 500)))
+            continue
+
+        btnNext = findpic.getLoc("newpic.png", "next0.png")
+        if btnNext:
+            downPoint(btnNext)
+            continue
+        btnNext = findpic.getLoc("newpic.png", "next2.png")
+        if btnNext:
+            downPoint(btnNext)
+            continue
+
+        # 看看图有没有进入消除界面
+        if findpic.getLoc("newpic.png", "other.png"):
+            pass
+        else:
+            print("画面中没有珠子")
+            # 找一找图片中的各种按钮图片 并点击一下
+            continue
+
+        srcImage = Image.open("newpic.png")
+
+        # 原始点
+        # baseBeadList = [[Bead.yellow, Bead.yellow, Bead.green, Bead.bule, Bead.purple, Bead.green, Bead.gray, Bead.red],
+        #                 [Bead.other, Bead.green, Bead.gray, Bead.red, Bead.bule, Bead.other, Bead.gray, Bead.other],
+        #                 [Bead.purple, Bead.yellow, Bead.bule, Bead.bule, Bead.red, Bead.gray, Bead.purple, Bead.purple],
+        #                 [Bead.yellow, Bead.other, Bead.green, Bead.red, Bead.red, Bead.green, Bead.green, Bead.bule],
+        #                 [Bead.yellow, Bead.red, Bead.gray, Bead.bule, Bead.other, Bead.yellow, Bead.gray, Bead.bule],
+        #                 [Bead.red, Bead.purple, Bead.green, Bead.gray, Bead.gray, Bead.red, Bead.green, Bead.purple],
+        #                 [Bead.gray, Bead.gray, Bead.bule, Bead.gray, Bead.bule, Bead.red, Bead.yellow, Bead.other],
+        #                 [Bead.other, Bead.red, Bead.purple, Bead.other, Bead.green, Bead.gray, Bead.green, Bead.purple]]
+        beadList = [[0] * 8 for row in range(8)]
+        # pointColor = srcImage.getpixel((cPoint[0] + 59 * 0, cPoint[1] + 59 * 6))
+        # print(pointColor)
+        # color = contrast_color.get_color(pointColor)
+        # print(color)
+        # exit()
+
+        beginX = gameLoc[0] + cPoint[0]
+        beginY = gameLoc[1] + cPoint[1]
+        # 识别图片中的球
+        for i in range(8):
+            for j in range(8):
+                # 找点的颜色  进行匹配，区分出是什么珠子
+                pointColor = srcImage.getpixel((beginX + 59 * i, beginY + 59 * j))
+                color = contrast_color.get_color(pointColor)
+                # print(color)
+                # if baseBeadList[i][j] == color:
+                beadList[i][j] = color
+                # else:
+                #     print("位置是%s,%s，点颜色%s,识别出来的颜色%s,应该是的颜色%s" % (i, j, pointColor, color, baseBeadList[i][j]))
+
+                # if color == "RED":
+                #     beads[i][j] = Bead.red
+        # print(contrast_color.get_color(c))
+
+        # 卡组消除的颜色顺序
+        findcolors = [Bead.other, Bead.red, Bead.yellow, Bead.bule]
+
+        # 先消除4  5连击
+        replacePoint5 = findColorsReplacePoint(replaceSet5, findcolors)
+        if replacePoint5:
+            movePoint(replacePoint5)
+            continue
+        replacePoint4 = findColorsReplacePoint(replaceSet4, findcolors)
+        if replaceSet4:
+            movePoint(replacePoint4)
+            continue
+
+        # 判断是否有技能
+        # 龙魂的技能
+        skillPointLonghun = findpic("newpic.png", "longhun.png")
+        if skillPointLonghun:
+            downPoint(skillPointLonghun)
+            btnNext = findpic.getLoc("newpic.png", "next1.png")
+            if btnNext:
+                sleepShort()
+                downPoint(btnNext)
+
+            else:
+                print("没有出现施法按钮")
+            continue
+        # 公主的技能
+        skillPointGongzhu = findpic("newpic.png", "gongzhu.png")
+        if skillPointGongzhu:
+            downPoint(skillPointGongzhu)
+            btnNext = findpic.getLoc("newpic.png", "next1.png")
+            if btnNext:
+                sleepShort()
+                downPoint(btnNext)
+                sleepShort()
+                if not gongzhupoint2:
+                    gongzhupoint2 = (gameLoc[0] + random.randrange(60, 130), gameLoc(1) + random.randrange(480, 580))
+                    downPoint(gongzhupoint2)
+
+                elif not gongzhupoint1:
+                    gongzhupoint1 = (gameLoc[0] + random.randrange(60, 130), gameLoc(1) + random.randrange(350, 450))
+                    downPoint(gongzhupoint1)
+            else:
+                print("没有出现施法按钮")
+            continue
+
+        # 卡组的技能
+        transitionList = skill.colorTransition(beadList, Bead.red, Bead.bule)
+
+        find345(beadList)
+
+        replacePoint3 = findColorsReplacePoint(replaceSet3, findcolors)
+        if replacePoint3:
+            movePoint(replacePoint3)
+
+
+# 公主技能打的点
+gongzhupoint1, gongzhupoint2 = False, False
 
 if __name__ == "__main__":
-    # autopy.mouse.smooth_move(1, 1)
-    # findWinLoc("GemsofWar")
-    # print(Be)
-    # loc = findpic.getLoc("yuantu.png", 'red.png')
-    # print(loc)
-
-    srcImage = Image.open("yuantu.png")
-    # findpic.getLoc("yuantu.png","bule.png")
-    # 原始点
-    cPoint = (172 + 15, 103 + 15)
-    baseBeadList = [[Bead.yellow, Bead.yellow, Bead.green, Bead.bule, Bead.purple, Bead.green, Bead.gray, Bead.red],
-                    [Bead.other, Bead.green, Bead.gray, Bead.red, Bead.bule, Bead.other, Bead.gray, Bead.other],
-                    [Bead.purple, Bead.yellow, Bead.bule, Bead.bule, Bead.red, Bead.gray, Bead.purple, Bead.purple],
-                    [Bead.yellow, Bead.other, Bead.green, Bead.red, Bead.red, Bead.green, Bead.green, Bead.bule],
-                    [Bead.yellow, Bead.red, Bead.gray, Bead.bule, Bead.other, Bead.yellow, Bead.gray, Bead.bule],
-                    [Bead.red, Bead.purple, Bead.green, Bead.gray, Bead.gray, Bead.red, Bead.green, Bead.purple],
-                    [Bead.gray, Bead.gray, Bead.bule, Bead.gray, Bead.bule, Bead.red, Bead.yellow, Bead.other],
-                    [Bead.other, Bead.red, Bead.purple, Bead.other, Bead.green, Bead.gray, Bead.green, Bead.purple]]
-    beadList = [[0] * 8 for row in range(8)]
-    # pointColor = srcImage.getpixel((cPoint[0] + 59 * 0, cPoint[1] + 59 * 6))
-    # print(pointColor)
-    # color = contrast_color.get_color(pointColor)
-    # print(color)
-    # exit()
-    # 识别图片中的球
-    for i in range(8):
-        for j in range(8):
-            # 找点的颜色  进行匹配，区分出是什么珠子
-            pointColor = srcImage.getpixel((cPoint[0] + 59 * i, cPoint[1] + 59 * j))
-            color = contrast_color.get_color(pointColor)
-            # print(color)
-            if baseBeadList[i][j] == color:
-                beadList[i][j] = color
-            else:
-                print("位置是%s,%s，点颜色%s,识别出来的颜色%s,应该是的颜色%s" % (i, j, pointColor, color, baseBeadList[i][j]))
-
-            # if color == "RED":
-            #     beads[i][j] = Bead.red
-    # print(contrast_color.get_color(c))
-
-    # 卡组消除的颜色顺序
-    findcolors = [Bead.gray]
-    #卡组的技能
-
-
-
-    find345(beadList)
-
-    replacePoint5 = findColorsReplacePoint(replaceSet5, findcolors)
-    if replacePoint5:
-        movePoint(replacePoint5)
-    replacePoint4 = findColorsReplacePoint(replaceSet4, findcolors)
-    if replaceSet4:
-        movePoint(replacePoint4)
-    replacePoint3 = findColorsReplacePoint(replaceSet3, findcolors)
-    if replacePoint3:
-        movePoint(replacePoint3)
+    beginGame()

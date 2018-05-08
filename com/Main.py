@@ -1,6 +1,10 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
+import autopy
+from PIL import Image
+from autopy.mouse import Button
+
 # print("你好，世界")
 #
 # val1 = [0, 1, 2, 3, 4, 5]
@@ -62,12 +66,27 @@
 # from datetime import datetime
 #
 # print(datetime.now())
+import random
+
+
+def fang():
+    pass
+
+
 if __name__ == "__main__":
-    # if '1' == '1':
-    #     a = '1'
-    a = set()
-    a.add(1)
-    if a :
+    a = False
+    # a = fang()
+    if not a:
         print(a)
     else:
-        print(2)
+        print("不存在")
+    pass
+    # 272 251
+    # autopy.mouse.move(272, 251)
+    # print(autopy.mouse.location())
+    # autopy.bitmap.capture_screen().save("zuomian.png")
+    # autopy.mouse.toggle(Button.LEFT, True)
+    # autopy.mouse.smooth_move(500, 251)
+    # autopy.mouse.toggle(Button.LEFT, False)
+    # autopy.mouse.click()
+    # autopy.mouse.click()
