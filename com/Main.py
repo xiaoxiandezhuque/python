@@ -70,17 +70,19 @@ import random
 
 
 def fang():
+    return "111"
     pass
 
 
 if __name__ == "__main__":
-    a = False
+    for i in range(30):
+        print(random.randrange(2))
     # a = fang()
-    if not a:
-        print(a)
-    else:
-        print("不存在")
-    pass
+    # if not a:
+    #     print(a)
+    # else:
+    #     print("不存在")
+    # pass
     # 272 251
     # autopy.mouse.move(272, 251)
     # print(autopy.mouse.location())

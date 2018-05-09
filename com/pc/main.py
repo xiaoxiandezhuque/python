@@ -1,5 +1,3 @@
-from builtins import print
-
 import autopy
 import win32api
 import win32gui
@@ -7,16 +5,19 @@ import win32con
 from PIL import Image
 
 from com.pc import findpic
-import contrast_color
-from Bead import Bead
+from com.pc import contrast_color
+from com.pc.Bead import Bead
 
 from com.pc import skill
 from com.pc.bean import Point
 from com.pc.bean import ReplacePoint
+from com.pc import findbead
 import autopy
 from autopy.mouse import Button
 import time
 import random
+
+from com.pc import pcclick
 
 
 def findWinLoc(name):
@@ -37,193 +38,21 @@ def findWinLoc(name):
     return loc
 
 
-def print4(i, j, locstr):
-    # print("位置(%s,%s)有4连以上（包括4）,这个点换%s面的点" % (i, j, locstr))
-    pass
-
-
-def print3(i, j, locstr):
-    # print("位置(%s,%s)有3连,这个点换%s面的点" % (i, j, locstr))
-    pass
-
-
-# 找 34连   返回一个集合
-def find345(beadList):
-    global replaceSet4, replaceSet3
-    for i in range(8):
-        for j in range(8):
-            lColor, rColor, tColor, bColor = False, False, False, False
-
-            if (i - 1 >= 0):
-                lColor = beadList[i - 1][j]
-            if (i + 1 <= 7):
-                rColor = beadList[i + 1][j]
-            if (j - 1 >= 0):
-                tColor = beadList[i][j - 1]
-            if (j + 1 <= 7):
-                bColor = beadList[i][j + 1]
-
-            if lColor and lColor == rColor:
-                if lColor == bColor:
-                    if (i - 2 >= 0 and beadList[i - 2][j] == lColor) or (i + 2 <= 7 and beadList[i + 2][j] == lColor):
-                        print4(i, j, "下")
-                        replaceSet4.add(ReplacePoint(bColor, Point(i, j), Point(i, j + 1)))
-                    else:
-                        print3(i, j, "下")
-                        replaceSet3.add(ReplacePoint(bColor, Point(i, j), Point(i, j + 1)))
-                if lColor == tColor:
-                    if (i - 2 >= 0 and beadList[i - 2][j] == lColor) or (i + 2 <= 7 and beadList[i + 2][j] == lColor):
-                        print4(i, j, "上")
-                        replaceSet4.add(ReplacePoint(tColor, Point(i, j), Point(i, j - 1)))
-                    else:
-                        print3(i, j, "上")
-                        replaceSet3.add(ReplacePoint(tColor, Point(i, j), Point(i, j - 1)))
-            if tColor and tColor == bColor:
-                if tColor == lColor:
-                    if (j - 2 >= 0 and beadList[i][j - 2] == tColor) or (j + 2 <= 7 and beadList[i][j + 2] == tColor):
-                        print4(i, j, "左")
-                        replaceSet4.add(ReplacePoint(lColor, Point(i, j), Point(i - 1, j)))
-                    else:
-                        print3(i, j, "左")
-                        replaceSet3.add(ReplacePoint(lColor, Point(i, j), Point(i - 1, j)))
-                if tColor == rColor:
-                    if (j - 2 >= 0 and beadList[i][j - 2] == tColor) or (j + 2 <= 7 and beadList[i][j + 2] == tColor):
-                        print4(i, j, "右")
-                        replaceSet4.add(ReplacePoint(rColor, Point(i, j), Point(i + 1, j)))
-                    else:
-                        print3(i, j, "右")
-                        replaceSet3.add(ReplacePoint(rColor, Point(i, j), Point(i + 1, j)))
-
-            if i - 2 >= 0:
-                llColor = beadList[i - 2][j]
-                if llColor == lColor:
-                    if lColor == rColor:
-                        print3(i, j, "右")
-                        replaceSet3.add(ReplacePoint(rColor, Point(i, j), Point(i + 1, j)))
-                    elif lColor == tColor:
-                        print3(i, j, "上")
-                        replaceSet3.add(ReplacePoint(tColor, Point(i, j), Point(i, j - 1)))
-                    elif lColor == bColor:
-                        print3(i, j, "下")
-                        replaceSet3.add(ReplacePoint(bColor, Point(i, j), Point(i, j + 1)))
-            if i + 2 <= 7:
-                rrColor = beadList[i + 2][j]
-                if rrColor == rColor:
-                    if rColor == lColor:
-                        print3(i, j, "左")
-                        replaceSet3.add(ReplacePoint(lColor, Point(i, j), Point(i - 1, j)))
-                    elif rColor == tColor:
-                        print3(i, j, "上")
-                        replaceSet3.add(ReplacePoint(tColor, Point(i, j), Point(i, j - 1)))
-                    elif rColor == bColor:
-                        print3(i, j, "下")
-                        replaceSet3.add(ReplacePoint(bColor, Point(i, j), Point(i, j + 1)))
-            if j - 2 >= 0:
-                ttColor = beadList[i][j - 2]
-                if ttColor == tColor:
-                    if tColor == lColor:
-                        print3(i, j, "左")
-                        replaceSet3.add(ReplacePoint(lColor, Point(i, j), Point(i - 1, j)))
-                    elif tColor == rColor:
-                        print3(i, j, "右")
-                        replaceSet3.add(ReplacePoint(rColor, Point(i, j), Point(i + 1, j)))
-                    elif tColor == bColor:
-                        print3(i, j, "下")
-                        replaceSet3.add(ReplacePoint(bColor, Point(i, j), Point(i, j + 1)))
-
-            if j + 2 <= 7:
-                bbColor = beadList[i][j + 2]
-                if bbColor == bColor:
-                    if bColor == lColor:
-                        print3(i, j, "左")
-                        replaceSet3.add(ReplacePoint(lColor, Point(i, j), Point(i - 1, j)))
-                    elif bColor == rColor:
-                        print3(i, j, "右")
-                        replaceSet3.add(ReplacePoint(rColor, Point(i, j), Point(i + 1, j)))
-                    elif bColor == tColor:
-                        print3(i, j, "上")
-                        replaceSet3.add(ReplacePoint(tColor, Point(i, j), Point(i, j - 1)))
-    find5(beadList)
-
-
-# 根据4连找5连
-def find5(beadList):
-    global replaceSet5, replaceSet4
-    if replaceSet4:
-        for c in replaceSet4:
-            color, x, y = c.color, c.fromPoint.x, c.fromPoint.y
-            lColor, rColor, tColor, bColor = False, False, False, False
-            if x - 1 >= 0:
-                lColor = beadList[x - 1][y]
-            if x + 1 <= 7:
-                rColor = beadList[x + 1][y]
-            if y - 1 >= 0:
-                tColor = beadList[x][y - 1]
-            if y + 1 <= 7:
-                bColor = beadList[x][y + 1]
-            if lColor == rColor == tColor == bColor:
-                if x - 2 >= 0 and beadList[x - 2][y] == color:
-                    replaceSet5.add(ReplacePoint(color, Point(x, y), Point(x + 1, y)))
-                if x + 2 <= 7 and beadList[x + 2][y] == color:
-                    replaceSet5.add(ReplacePoint(color, Point(x, y), Point(x - 1, y)))
-                if y - 2 >= 0 and beadList[x][y - 2] == color:
-                    replaceSet5.add(ReplacePoint(color, Point(x, y), Point(x, y + 1)))
-                if y + 2 <= 7 and beadList[x][y + 2] == color:
-                    replaceSet5.add(ReplacePoint(color, Point(x, y), Point(x, y - 1)))
-            else:
-                if (color == lColor and x - 2 >= 0 and beadList[x - 2][y] == color) or \
-                        (color == rColor and x + 2 <= 7 and beadList[x + 2][y] == color):
-                    if bColor == color:
-                        replaceSet5.add(ReplacePoint(color, Point(x, y), Point(x, y + 1)))
-                    elif tColor == color:
-                        replaceSet5.add(ReplacePoint(color, Point(x, y), Point(x, y - 1)))
-                if (color == tColor and y - 2 >= 0 and beadList[x][y - 2] == color) or \
-                        (color == bColor and y + 2 <= 7 and beadList[x][y + 2] == color):
-                    if lColor == color:
-                        replaceSet5.add(ReplacePoint(color, Point(x, y), Point(x - 1, y)))
-                    elif rColor == color:
-                        replaceSet5.add(ReplacePoint(color, Point(x, y), Point(x + 1, y)))
-
-
-def findColorsReplacePoint(replaceSet, colors):
-    if replaceSet:
-        for color in colors:
-            for replacePoint in replaceSet:
-                if color == replacePoint.color:
-                    return replacePoint
-        return replaceSet.pop()
-
-
-def movePoint(replacePoint):
-    # print("移动点（%s，%s）到（%s，%s），颜色是%s"
-    #       % (replacePoint.fromPoint.x, replacePoint.fromPoint.y, replacePoint.toPoint.x, replacePoint.toPoint.y,
-    #          replacePoint.color))
-    global beginX, beginY
-
-    autopy.mouse.smooth_move(beginX + replacePoint.fromPoint.x * 59 + random.randrange(10, 40),
-                             beginY + replacePoint.fromPoint.y * 59 + random.randrange(10, 40))
-    autopy.mouse.toggle(Button.LEFT, True)
-    time.sleep(random.randrange(300, 1000) / 1000)
-    autopy.mouse.smooth_move(beginX + replacePoint.toPoint.x * 59 + random.randrange(10, 40),
-                             beginY + replacePoint.toPoint.y * 59 + random.randrange(10, 40))
-    time.sleep(random.randrange(100, 300) / 1000)
-    autopy.mouse.toggle(Button.LEFT, False)
-    pass
-
-
-def downPoint(point):
-    autopy.mouse.smooth_move(point[0], point[1])
-    autopy.mouse.toggle(Button.LEFT, True)
-    time.sleep(random.randrange(100, 300) / 1000)
-    autopy.mouse.toggle(Button.LEFT, False)
-
-
 def sleepShort():
     time.sleep(random.randrange(1000, 2000) / 1000)
 
 
 def sleepLong():
     time.sleep(random.randrange(5000, 8000) / 1000)
+
+
+def quitThisGame(gameLoc):
+    pcclick.downPoint(gameLoc[0] + random.randrange(768, 794), gameLoc[1] + random.randrange(44, 69))
+    sleepShort()
+    pcclick.downPoint(gameLoc[0] + random.randrange(768, 794), gameLoc[1] + random.randrange(44, 69))
+    sleepShort()
+    pcclick.downPoint(gameLoc[0] + random.randrange(768, 794), gameLoc[1] + random.randrange(44, 69))
+    pass
 
 
 replaceSet5 = set()
@@ -238,15 +67,19 @@ gongzhupoint1, gongzhupoint2 = False, False
 count_no_bead = 0
 count_games = 0
 
+img_src = "./img/newpic.png"
+
 
 def beginGame():
     global cPoint, replaceSet5, replaceSet4, replaceSet3, beginX, beginY, gongzhupoint1, gongzhupoint2
+    global img_src
     global count_no_bead, count_games
+
     while True:
-        try:
-            Image.open("newpic.png").save("oldpic.png")
-        except FileNotFoundError as e:
-            print("没有找到之前的图片")
+        # try:
+        #     Image.open(img_src).save("oldpic.png")
+        # except FileNotFoundError as e:
+        #     print("没有找到之前的图片")
         replaceSet5.clear()
         replaceSet4.clear()
         replaceSet3.clear()
@@ -254,52 +87,60 @@ def beginGame():
         gameLoc = findWinLoc("gemsofwar")
         # print("游戏窗口的位置 ")
         # print(gameLoc)
-        autopy.bitmap.capture_screen().save("newpic.png")
+        autopy.bitmap.capture_screen().save(img_src)
 
         #  这里有点小问题
-        # if findpic.getLoc("newpic.png", "oldpic.png"):
+        # if findpic.getLoc(img_src, "oldpic.png"):
         #     print("之前和现在的界面一样")
         # downPoint((gameLoc[0] + random.randrange(450, 600), gameLoc[1] + random.randrange(200, 500)))
         # continue
 
-        btnNext = findpic.getLoc("newpic.png", "again.png")
+        # 断线重连的  图标
+        btnNext = findpic.getLoc(img_src, "./img/again.png")
         if btnNext:
             sleepLong()
             sleepLong()
-
-        btnNext = findpic.getLoc("newpic.png", "next0.png")
+        # 继续 按钮
+        btnNext = findpic.getLoc(img_src, "./img/next0.png")
         if btnNext:
-            downPoint(btnNext)
+            pcclick.downPoint(btnNext)
             sleepLong()
             continue
-        btnNext = findpic.getLoc("newpic.png", "next2.png")
+        # 提升等级  按钮
+        btnNext = findpic.getLoc(img_src, "./img/next2.png")
         if btnNext:
-            downPoint(btnNext)
+            pcclick.downPoint(btnNext)
+            sleepShort()
+            # 点击出现的选择灵珠
+            pcclick.downPoint((gameLoc[0] + random.randrange(450, 600), gameLoc[1] + random.randrange(200, 500)))
             sleepShort()
             continue
-        btnNext = findpic.getLoc("newpic.png", "next3.png")
+        # 准备战斗 按钮
+        btnNext = findpic.getLoc(img_src, "./img/next3.png")
         if btnNext:
-            downPoint(btnNext)
+            pcclick.downPoint(btnNext)
             gongzhupoint1 = False
             gongzhupoint2 = False
             count_games += 1
             print("游戏次数%s" % (count_games))
             sleepLong()
             continue
-        btnNext = findpic.getLoc("newpic.png", "next4.png")
+        # 重试  按钮
+        btnNext = findpic.getLoc(img_src, "./img/next4.png")
         if btnNext:
-            downPoint(btnNext)
+            pcclick.downPoint(btnNext)
             sleepLong()
             sleepLong()
             continue
-        btnNext = findpic.getLoc("newpic.png", "next5.png")
+        # 在来一场  按钮
+        btnNext = findpic.getLoc(img_src, "./img/next5.png")
         if btnNext:
-            downPoint(btnNext)
+            pcclick.downPoint(btnNext)
             sleepShort()
             continue
 
         # 看看图有没有进入消除界面
-        if findpic.getLoc("newpic.png", "other.png"):
+        if findpic.getLoc(img_src, "./img/other.png"):
             count_no_bead = 0
             pass
         else:
@@ -307,49 +148,56 @@ def beginGame():
             print("画面中没有珠子")
             if count_no_bead >= 9:
                 exit("连续没有珠子的次数太多，退出")
-            downPoint((gameLoc[0] + random.randrange(450, 600), gameLoc[1] + random.randrange(200, 500)))
+            pcclick.downPoint((gameLoc[0] + random.randrange(450, 600), gameLoc[1] + random.randrange(200, 500)))
             sleepLong()
             continue
 
+        srcImage = Image.open(img_src)
         # 判断是否有技能
         # 龙魂的技能
-        skillPointLonghun = findpic.getLoc("newpic.png", "longhun.png")
+        skillPointLonghun = findpic.getLoc(img_src, "longhun.png")
         if skillPointLonghun:
-            downPoint(skillPointLonghun)
+            pcclick.downPoint(skillPointLonghun)
             sleepShort()
-            autopy.bitmap.capture_screen().save("newpic.png")
-            btnNext = findpic.getLoc("newpic.png", "next1.png")
+            autopy.bitmap.capture_screen().save(img_src)
+            btnNext = findpic.getLoc(img_src, "next1.png")
             if btnNext:
                 sleepShort()
-                downPoint(btnNext)
+                pcclick.downPoint(btnNext)
 
             else:
                 print("没有出现施法按钮")
             sleepLong()
             continue
+        else:
+            srcImage.crop((gameLoc[0], gameLoc[1], gameLoc[2] / 2, gameLoc[3])).save("./img/myplace.png")
+            if not findpic.getLoc("./img/myplace.png", "./img/longhun_no.png"):
+                # 退出这一把,开始下一把
+                quitThisGame(gameLoc)
+                sleepShort()
+                continue
+
         # 公主的技能
-        skillPointGongzhu = findpic.getLoc("newpic.png", "gongzhu.png")
+        skillPointGongzhu = findpic.getLoc(img_src, "gongzhu.png")
         if skillPointGongzhu and (not gongzhupoint1 or not gongzhupoint2):
-            downPoint(skillPointGongzhu)
+            pcclick.downPoint(skillPointGongzhu)
             sleepShort()
-            autopy.bitmap.capture_screen().save("newpic.png")
-            btnNext = findpic.getLoc("newpic.png", "next1.png")
+            autopy.bitmap.capture_screen().save(img_src)
+            btnNext = findpic.getLoc(img_src, "next1.png")
             if btnNext:
                 sleepShort()
-                downPoint(btnNext)
+                pcclick.downPoint(btnNext)
                 sleepShort()
                 if not gongzhupoint2:
                     gongzhupoint2 = True
-                    downPoint((gameLoc[0] + random.randrange(60, 130), gameLoc[1] + random.randrange(480, 580)))
+                    pcclick.downPoint((gameLoc[0] + random.randrange(60, 130), gameLoc[1] + random.randrange(480, 580)))
                 else:
                     gongzhupoint1 = True
-                    downPoint((gameLoc[0] + random.randrange(60, 130), gameLoc[1] + random.randrange(350, 450)))
+                    pcclick.downPoint((gameLoc[0] + random.randrange(60, 130), gameLoc[1] + random.randrange(350, 450)))
             else:
                 print("没有出现施法按钮")
             sleepLong()
             continue
-
-        srcImage = Image.open("newpic.png")
 
         # 原始点
         # baseBeadList = [[Bead.yellow, Bead.yellow, Bead.green, Bead.bule, Bead.purple, Bead.green, Bead.gray, Bead.red],
@@ -403,28 +251,105 @@ def beginGame():
 
         # 卡组消除的颜色顺序
         findcolors = [Bead.other, Bead.purple, Bead.red]
-        find345(beadList)
+        replaceSet5, replaceSet4, replaceSet3 = findbead.find345(beadList)
         # 先消除4  5连击
-        replacePoint5 = findColorsReplacePoint(replaceSet5, findcolors)
+        replacePoint5 = findbead.findColorsReplacePoint(replaceSet5, findcolors)
         if replacePoint5:
-            movePoint(replacePoint5)
+            pcclick.movePoint(replacePoint5, beginX, beginY)
             sleepLong()
             continue
-        replacePoint4 = findColorsReplacePoint(replaceSet4, findcolors)
+        replacePoint4 = findbead.findColorsReplacePoint(replaceSet4, findcolors)
         if replaceSet4:
-            movePoint(replacePoint4)
+            pcclick.movePoint(replacePoint4, beginX, beginY)
             sleepLong()
             continue
 
         # 卡组的技能
         # transitionList = skill.colorTransition(beadList, Bead.red, Bead.bule)
 
-        replacePoint3 = findColorsReplacePoint(replaceSet3, findcolors)
+        replacePoint3 = findbead.findColorsReplacePoint(replaceSet3, findcolors)
         if replacePoint3:
-            movePoint(replacePoint3)
+            pcclick.movePoint(replacePoint3, beginX, beginY)
             sleepLong()
             continue
 
 
+def tesTFindBead():
+    global cPoint
+
+    # 原始点
+    baseBeadList = [[Bead.yellow, Bead.other, Bead.gray, Bead.red, Bead.purple, Bead.purple, Bead.gray, Bead.other],
+                    [Bead.gray, Bead.red, Bead.other, Bead.bule, Bead.yellow, Bead.bule, Bead.green, Bead.yellow],
+                    [Bead.gray, Bead.green, Bead.red, Bead.yellow, Bead.gray, Bead.purple, Bead.bule, Bead.green],
+                    [Bead.other, Bead.yellow, Bead.bule, Bead.bule, Bead.red, Bead.yellow, Bead.gray, Bead.purple],
+                    [Bead.red, Bead.red, Bead.green, Bead.green, Bead.gray, Bead.green, Bead.other, Bead.gray],
+                    [Bead.red, Bead.gray, Bead.other, Bead.red, Bead.other, Bead.bule, Bead.green, Bead.other],
+                    [Bead.yellow, Bead.red, Bead.red, Bead.yellow, Bead.bule, Bead.red, Bead.yellow, Bead.green],
+                    [Bead.red, Bead.red, Bead.green, Bead.other, Bead.purple, Bead.other, Bead.green, Bead.bule]]
+
+    beadList = [[0] * 8 for row in range(8)]
+    # pointColor = srcImage.getpixel((cPoint[0] + 59 * 0, cPoint[1] + 59 * 6))
+    # print(pointColor)
+    # color = contrast_color.get_color(pointColor)
+    # print(color)
+    # exit()
+    srcImage = Image.open("333333.png")
+    beginX = cPoint[0]
+    beginY = cPoint[1]
+    # 识别图片中的球
+    for i in range(8):
+        for j in range(8):
+            # 找点的颜色  进行匹配，区分出是什么珠子
+            pointColor = srcImage.getpixel((beginX + 59 * i, beginY + 59 * j))
+            color = contrast_color.get_color(pointColor)
+            # print(color)
+            beadList[i][j] = color
+            if not baseBeadList[i][j] == color:
+                print("在（%s,%s）点颜色不一样，识别的颜色是%s，本来的颜色是%s" % (i, j, color, baseBeadList[i][j]))
+                print(pointColor)
+
+            # if i == 7 and j == 3:
+            #     print((beginX + 59 * i, beginY + 59 * j))
+            #     print(pointColor)
+            # if i == 7 and j == 5:
+            #     print((beginX + 59 * i, beginY + 59 * j))
+            #     print(pointColor)
+
+        # print("位置是%s,%s，点颜色%s,识别出来的颜色%s,应该是的颜色%s" % (i, j, pointColor, color, baseBeadList[i][j]))
+
+        # if color == "RED":
+        #     beads[i][j] = Bead.red
+    # print(contrast_color.get_color(c))
+    # print(beadList[0])
+    # print(beadList[1])
+    # print(beadList[2])
+    # print(beadList[3])
+    # print(beadList[4])
+    # print(beadList[5])
+    # print(beadList[6])
+    # print(beadList[7])
+    # exit()
+    return baseBeadList
+
+
 if __name__ == "__main__":
     beginGame()
+
+    # beadList = tesTFindBead()
+    # replaceSet5, replaceSet4, replaceSet3 = findbead.find345(beadList)
+    # for beadPoint in replaceSet5:
+    #     print(beadPoint)
+    #
+    # print("----------------------")
+    # for beadPoint in replaceSet4:
+    #     print(beadPoint)
+
+    # print(replaceSet5)
+    # print(replaceSet4)
+    # print(replaceSet3)
+    # beginGame()
+    #     autopy.bitmap.capture_screen().save(r"./img/111111.png")
+    #     img = Image.open(r"./img/111111.png")
+    #     img.crop((0,0,1000,1200)).save(r"./img/2222.png")
+
+    pass
