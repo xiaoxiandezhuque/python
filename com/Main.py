@@ -67,16 +67,21 @@ from autopy.mouse import Button
 #
 # print(datetime.now())
 import random
-
+from com.pc.bean import ReplacePoint
 
 def fang():
-    return "111"
+
     pass
 
 
 if __name__ == "__main__":
-    for i in range(30):
-        print(random.randrange(2))
+
+    a = ReplacePoint(1,1,1)
+    b = ReplacePoint(1,1,1)
+    print(a==b)
+    print(a.__dict__== b.__dict__)
+    print(a.__dict__)
+
     # a = fang()
     # if not a:
     #     print(a)

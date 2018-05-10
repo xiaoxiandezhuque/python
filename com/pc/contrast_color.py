@@ -11,7 +11,7 @@ colors = dict((
     ((114, 32, 170), Bead.purple),
     ((219, 172, 239), Bead.purple),
     ((239, 239, 239), Bead.other),
-    ((242, 146, 124), Bead.other),
+
     ((168, 126, 106), Bead.gray),))
 
 # ((196, 2, 51), "RED"),

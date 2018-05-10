@@ -193,10 +193,6 @@ def find5(beadList, replaceSet4, replaceSet5):
                         replaceSet5.add(ReplacePoint(color, Point(x, y), Point(x, y - 1)))
 
 
-
-
-
-
 def print4(i, j, locstr):
     # print("位置(%s,%s)有4连以上（包括4）,这个点换%s面的点" % (i, j, locstr))
     pass
@@ -212,5 +208,6 @@ def findColorsReplacePoint(replaceSet, colors):
         for color in colors:
             for replacePoint in replaceSet:
                 if color == replacePoint.color:
+                    replaceSet.remove(replacePoint)
                     return replacePoint
         return replaceSet.pop()

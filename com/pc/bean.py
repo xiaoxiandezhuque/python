@@ -15,6 +15,7 @@ class ReplacePoint(object):
                (self.color, self.fromPoint.x, self.fromPoint.y, self.toPoint.x, self.toPoint.y)
 
 
+
 if __name__ == "__main__":
     a = Point(1, 1)
     b = Point(2, 3)

@@ -39,20 +39,25 @@ def findWinLoc(name):
 
 
 def sleepShort():
-    time.sleep(random.randrange(1000, 2000) / 1000)
+    time.sleep(random.randrange(2000, 3000) / 1000)
 
 
 def sleepLong():
-    time.sleep(random.randrange(5000, 8000) / 1000)
+    time.sleep(random.randrange(6000, 8000) / 1000)
 
 
 def quitThisGame(gameLoc):
-    pcclick.downPoint(gameLoc[0] + random.randrange(768, 794), gameLoc[1] + random.randrange(44, 69))
+    printPC("退出本次游戏")
+    pcclick.downPoint((gameLoc[0] + random.randrange(768, 794), gameLoc[1] + random.randrange(44, 69)))
     sleepShort()
-    pcclick.downPoint(gameLoc[0] + random.randrange(768, 794), gameLoc[1] + random.randrange(44, 69))
+    pcclick.downPoint((gameLoc[0] + random.randrange(334, 486), gameLoc[1] + random.randrange(430, 479)))
     sleepShort()
-    pcclick.downPoint(gameLoc[0] + random.randrange(768, 794), gameLoc[1] + random.randrange(44, 69))
+    pcclick.downPoint((gameLoc[0] + random.randrange(444, 530), gameLoc[1] + random.randrange(381, 404)))
     pass
+
+
+def printPC(str):
+    print(str)
 
 
 replaceSet5 = set()
@@ -68,13 +73,14 @@ count_no_bead = 0
 count_games = 0
 
 img_src = "./img/newpic.png"
+movePointAgain = ReplacePoint(1, Point(1, 1), Point(1, 1))
 
 
 def beginGame():
     global cPoint, replaceSet5, replaceSet4, replaceSet3, beginX, beginY, gongzhupoint1, gongzhupoint2
     global img_src
     global count_no_bead, count_games
-
+    global movePointAgain
     while True:
         # try:
         #     Image.open(img_src).save("oldpic.png")
@@ -95,6 +101,16 @@ def beginGame():
         # downPoint((gameLoc[0] + random.randrange(450, 600), gameLoc[1] + random.randrange(200, 500)))
         # continue
 
+        # 需要刷的石头城市 点击
+        btnNext = findpic.getLoc(img_src, "./img/needshitou.png")
+        if btnNext:
+            printPC("点击刷的城市")
+            pcclick.downPoint(btnNext)
+            sleepShort()
+            pcclick.downPoint((gameLoc[0] + random.randrange(413, 657), gameLoc[1] + random.randrange(221, 345)))
+            sleepShort()
+            continue
+
         # 断线重连的  图标
         btnNext = findpic.getLoc(img_src, "./img/again.png")
         if btnNext:
@@ -103,12 +119,14 @@ def beginGame():
         # 继续 按钮
         btnNext = findpic.getLoc(img_src, "./img/next0.png")
         if btnNext:
+            printPC("点击继续")
             pcclick.downPoint(btnNext)
             sleepLong()
             continue
         # 提升等级  按钮
         btnNext = findpic.getLoc(img_src, "./img/next2.png")
         if btnNext:
+            printPC("点击 提升等级")
             pcclick.downPoint(btnNext)
             sleepShort()
             # 点击出现的选择灵珠
@@ -118,6 +136,7 @@ def beginGame():
         # 准备战斗 按钮
         btnNext = findpic.getLoc(img_src, "./img/next3.png")
         if btnNext:
+            printPC("点击 准备战斗")
             pcclick.downPoint(btnNext)
             gongzhupoint1 = False
             gongzhupoint2 = False
@@ -128,6 +147,7 @@ def beginGame():
         # 重试  按钮
         btnNext = findpic.getLoc(img_src, "./img/next4.png")
         if btnNext:
+            printPC("点击 重试")
             pcclick.downPoint(btnNext)
             sleepLong()
             sleepLong()
@@ -135,12 +155,15 @@ def beginGame():
         # 在来一场  按钮
         btnNext = findpic.getLoc(img_src, "./img/next5.png")
         if btnNext:
+            printPC("点击 在来一场")
             pcclick.downPoint(btnNext)
             sleepShort()
             continue
 
         # 看看图有没有进入消除界面
-        if findpic.getLoc(img_src, "./img/other.png"):
+        if findpic.getLoc(img_src, "./img/other.png") or \
+                findpic.getLoc(img_src, "./img/gray.png") or \
+                findpic.getLoc(img_src, "./img/red.png"):
             count_no_bead = 0
             pass
         else:
@@ -155,12 +178,13 @@ def beginGame():
         srcImage = Image.open(img_src)
         # 判断是否有技能
         # 龙魂的技能
-        skillPointLonghun = findpic.getLoc(img_src, "longhun.png")
+        skillPointLonghun = findpic.getLoc(img_src, "./img/longhun.png")
         if skillPointLonghun:
+            printPC("点击 龙魂技能")
             pcclick.downPoint(skillPointLonghun)
             sleepShort()
             autopy.bitmap.capture_screen().save(img_src)
-            btnNext = findpic.getLoc(img_src, "next1.png")
+            btnNext = findpic.getLoc(img_src, "./img/next1.png")
             if btnNext:
                 sleepShort()
                 pcclick.downPoint(btnNext)
@@ -171,19 +195,21 @@ def beginGame():
             continue
         else:
             srcImage.crop((gameLoc[0], gameLoc[1], gameLoc[2] / 2, gameLoc[3])).save("./img/myplace.png")
-            if not findpic.getLoc("./img/myplace.png", "./img/longhun_no.png"):
+            if not findpic.getLoc("./img/myplace.png", "./img/longhun_no.png") and \
+                    findpic.getLoc("./img/myplace.png", "./img/card_die.png"):
                 # 退出这一把,开始下一把
                 quitThisGame(gameLoc)
                 sleepShort()
                 continue
 
         # 公主的技能
-        skillPointGongzhu = findpic.getLoc(img_src, "gongzhu.png")
+        skillPointGongzhu = findpic.getLoc(img_src, "./img/gongzhu.png")
         if skillPointGongzhu and (not gongzhupoint1 or not gongzhupoint2):
+            printPC("点击 公主技能")
             pcclick.downPoint(skillPointGongzhu)
             sleepShort()
             autopy.bitmap.capture_screen().save(img_src)
-            btnNext = findpic.getLoc(img_src, "next1.png")
+            btnNext = findpic.getLoc(img_src, "./img/next1.png")
             if btnNext:
                 sleepShort()
                 pcclick.downPoint(btnNext)
@@ -255,23 +281,68 @@ def beginGame():
         # 先消除4  5连击
         replacePoint5 = findbead.findColorsReplacePoint(replaceSet5, findcolors)
         if replacePoint5:
-            pcclick.movePoint(replacePoint5, beginX, beginY)
-            sleepLong()
-            continue
+            printPC("消除5 连")
+            if movePointAgain and myequest(movePointAgain, replacePoint5):
+                replacePoint5 = findbead.findColorsReplacePoint(replaceSet5, findcolors)
+                if replacePoint5:
+                    movePointAgain = replacePoint5
+
+                    pcclick.movePoint(replacePoint5, beginX, beginY)
+                    sleepLong()
+                    return
+            else:
+                movePointAgain = replacePoint5
+                pcclick.movePoint(replacePoint5, beginX, beginY)
+                sleepLong()
+                continue
         replacePoint4 = findbead.findColorsReplacePoint(replaceSet4, findcolors)
         if replaceSet4:
-            pcclick.movePoint(replacePoint4, beginX, beginY)
-            sleepLong()
-            continue
+            printPC("消除4 连")
+            if movePointAgain and myequest(movePointAgain, replacePoint4):
+                replacePoint4 = findbead.findColorsReplacePoint(replaceSet4, findcolors)
+                if replacePoint4:
+                    movePointAgain = replacePoint4
+                    pcclick.movePoint(replacePoint4, beginX, beginY)
+                    sleepLong()
+                    continue
+            else:
+                movePointAgain = replacePoint4
+                pcclick.movePoint(replacePoint4, beginX, beginY)
+                sleepLong()
+                continue
 
         # 卡组的技能
         # transitionList = skill.colorTransition(beadList, Bead.red, Bead.bule)
 
         replacePoint3 = findbead.findColorsReplacePoint(replaceSet3, findcolors)
         if replacePoint3:
-            pcclick.movePoint(replacePoint3, beginX, beginY)
-            sleepLong()
-            continue
+            printPC("消除3 连")
+            if movePointAgain and myequest(movePointAgain, replacePoint3):
+                replacePoint3 = findbead.findColorsReplacePoint(replaceSet3, findcolors)
+                if replacePoint3:
+                    movePointAgain = replacePoint3
+                    pcclick.movePoint(replacePoint3, beginX, beginY)
+                    sleepLong()
+                    continue
+            else:
+                movePointAgain = replacePoint3
+                pcclick.movePoint(replacePoint3, beginX, beginY)
+                sleepLong()
+                continue
+
+
+def myequest(a, o):
+    if a.color != o.color:
+        return False
+    if a.fromPoint.x != o.fromPoint.x:
+        return False
+    if a.fromPoint.y != o.fromPoint.y:
+        return False
+    if a.toPoint.x != o.toPoint.x:
+        return False
+    if a.toPoint.y != o.toPoint.y:
+        return False
+    return True
 
 
 def tesTFindBead():
