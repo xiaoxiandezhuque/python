@@ -63,6 +63,62 @@ def printPC(str):
     pass
 
 
+def distinguishBead(srcimg, beginX, beginY):
+    otherBead = findpic.getAllLoc(srcimg, "./img/other.png")
+    otherBead1 = findpic.getAllLoc(srcimg, "./img/other1.png")
+    otherBead = otherBead | otherBead1
+    redBead = findpic.getAllLoc(srcimg, "./img/red.png")
+    buleBead = findpic.getAllLoc(srcimg, "./img/blue.png")
+    grayBead = findpic.getAllLoc(srcimg, "./img/gray.png")
+    greenBead = findpic.getAllLoc(srcimg, "./img/green.png")
+    purpleBead = findpic.getAllLoc(srcimg, "./img/purple.png")
+    beadList = [[0] * 8 for row in range(8)]
+    for i in range(8):
+        for j in range(8):
+            xl = beginX + i * 59
+            xr = beginX + (i + 1) * 59
+            yt = beginY + j * 59
+            yb = beginY + (j + 1) * 59
+            for k in otherBead:
+                if k[0] > xl and k[0] < xr and k[1] > yt and k[1] < yb:
+                    beadList[i][j] = Bead.other
+                    break
+            if beadList[i][j]:
+                continue
+            for k in redBead:
+                if k[0] > xl and k[0] < xr and k[1] > yt and k[1] < yb:
+                    beadList[i][j] = Bead.red
+                    break
+            if beadList[i][j]:
+                continue
+            for k in buleBead:
+                if k[0] > xl and k[0] < xr and k[1] > yt and k[1] < yb:
+                    beadList[i][j] = Bead.blue
+                    break
+            if beadList[i][j]:
+                continue
+            for k in grayBead:
+                if k[0] > xl and k[0] < xr and k[1] > yt and k[1] < yb:
+                    beadList[i][j] = Bead.gray
+                    break
+            if beadList[i][j]:
+                continue
+            for k in greenBead:
+                if k[0] > xl and k[0] < xr and k[1] > yt and k[1] < yb:
+                    beadList[i][j] = Bead.green
+                    break
+            if beadList[i][j]:
+                continue
+            for k in purpleBead:
+                if k[0] > xl and k[0] < xr and k[1] > yt and k[1] < yb:
+                    beadList[i][j] = Bead.purple
+                    break
+            if beadList[i][j]:
+                continue
+            beadList[i][j] = Bead.yellow
+    return beadList
+
+
 replaceSet5 = set()
 replaceSet4 = set()
 replaceSet3 = set()
@@ -178,7 +234,6 @@ def beginGame():
             sleepLong()
             continue
 
-        srcImage = Image.open(img_src)
         # 判断是否有技能
         # 龙魂的技能
         skillPointLonghun = findpic.getLoc(img_src, "./img/longhun.png")
@@ -197,6 +252,7 @@ def beginGame():
             sleepLong()
             continue
         else:
+            srcImage = Image.open(img_src)
             srcImage.crop((gameLoc[0], gameLoc[1], gameLoc[2] / 2, gameLoc[3])).save("./img/myplace.png")
             if not findpic.getLoc("./img/myplace.png", "./img/longhun_no.png") and \
                     findpic.getLoc("./img/myplace.png", "./img/card_die.png"):
@@ -237,13 +293,13 @@ def beginGame():
         #                 [Bead.red, Bead.purple, Bead.green, Bead.gray, Bead.gray, Bead.red, Bead.green, Bead.purple],
         #                 [Bead.gray, Bead.gray, Bead.bule, Bead.gray, Bead.bule, Bead.red, Bead.yellow, Bead.other],
         #                 [Bead.other, Bead.red, Bead.purple, Bead.other, Bead.green, Bead.gray, Bead.green, Bead.purple]]
-        beadList = [[0] * 8 for row in range(8)]
+
         # pointColor = srcImage.getpixel((cPoint[0] + 59 * 0, cPoint[1] + 59 * 6))
         # print(pointColor)
         # color = contrast_color.get_color(pointColor)
         # print(color)
         # exit()
-
+        beadList = [[0] * 8 for row in range(8)]
         beginX = gameLoc[0] + cPoint[0]
         beginY = gameLoc[1] + cPoint[1]
         # 识别图片中的球
@@ -350,16 +406,16 @@ def myequest(a, o):
 
 def tesTFindBead():
     global cPoint
-
+    bengintime = int(round(time.time() * 1000))
     # 原始点
     baseBeadList = [[Bead.yellow, Bead.other, Bead.gray, Bead.red, Bead.purple, Bead.purple, Bead.gray, Bead.other],
-                    [Bead.gray, Bead.red, Bead.other, Bead.bule, Bead.yellow, Bead.bule, Bead.green, Bead.yellow],
-                    [Bead.gray, Bead.green, Bead.red, Bead.yellow, Bead.gray, Bead.purple, Bead.bule, Bead.green],
-                    [Bead.other, Bead.yellow, Bead.bule, Bead.bule, Bead.red, Bead.yellow, Bead.gray, Bead.purple],
+                    [Bead.gray, Bead.red, Bead.other, Bead.blue, Bead.yellow, Bead.blue, Bead.green, Bead.yellow],
+                    [Bead.gray, Bead.green, Bead.red, Bead.yellow, Bead.gray, Bead.purple, Bead.blue, Bead.green],
+                    [Bead.other, Bead.yellow, Bead.blue, Bead.blue, Bead.red, Bead.yellow, Bead.gray, Bead.purple],
                     [Bead.red, Bead.red, Bead.green, Bead.green, Bead.gray, Bead.green, Bead.other, Bead.gray],
-                    [Bead.red, Bead.gray, Bead.other, Bead.red, Bead.other, Bead.bule, Bead.green, Bead.other],
-                    [Bead.yellow, Bead.red, Bead.red, Bead.yellow, Bead.bule, Bead.red, Bead.yellow, Bead.green],
-                    [Bead.red, Bead.red, Bead.green, Bead.other, Bead.purple, Bead.other, Bead.green, Bead.bule]]
+                    [Bead.red, Bead.gray, Bead.other, Bead.red, Bead.other, Bead.blue, Bead.green, Bead.other],
+                    [Bead.yellow, Bead.blue, Bead.gray, Bead.yellow, Bead.blue, Bead.red, Bead.yellow, Bead.green],
+                    [Bead.red, Bead.red, Bead.green, Bead.other, Bead.purple, Bead.other, Bead.green, Bead.blue]]
 
     beadList = [[0] * 8 for row in range(8)]
     # pointColor = srcImage.getpixel((cPoint[0] + 59 * 0, cPoint[1] + 59 * 6))
@@ -367,9 +423,13 @@ def tesTFindBead():
     # color = contrast_color.get_color(pointColor)
     # print(color)
     # exit()
-    srcImage = Image.open("333333.png")
+    srcImage = Image.open("./img/4.png")
     beginX = cPoint[0]
     beginY = cPoint[1]
+    # beadList = distinguishBead("./img/4.png", beginX, beginY)
+
+    # print(beadList)
+
     # 识别图片中的球
     for i in range(8):
         for j in range(8):
@@ -378,9 +438,10 @@ def tesTFindBead():
             color = contrast_color.get_color(pointColor)
             # print(color)
             beadList[i][j] = color
+            # color = beadList[i][j]
             if not baseBeadList[i][j] == color:
                 print("在（%s,%s）点颜色不一样，识别的颜色是%s，本来的颜色是%s" % (i, j, color, baseBeadList[i][j]))
-                print(pointColor)
+                # print(pointColor)
 
             # if i == 7 and j == 3:
             #     print((beginX + 59 * i, beginY + 59 * j))
@@ -403,12 +464,15 @@ def tesTFindBead():
     # print(beadList[6])
     # print(beadList[7])
     # exit()
+
+    overtime = int(round(time.time() * 1000))
+    print("识别需要的时间%s" % (overtime - bengintime))
     return baseBeadList
 
 
 if __name__ == "__main__":
-    beginGame()
-
+    # beginGame()
+    tesTFindBead()
     # beadList = tesTFindBead()
     # replaceSet5, replaceSet4, replaceSet3 = findbead.find345(beadList)
     # for beadPoint in replaceSet5:

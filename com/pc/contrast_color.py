@@ -7,7 +7,7 @@ colors = dict((
     ((95, 183, 48), Bead.green),
     ((107, 186, 41), Bead.green),
     ((135, 225, 66), Bead.green),
-    ((27, 134, 195), Bead.bule),
+    ((27, 134, 195), Bead.blue),
     ((114, 32, 170), Bead.purple),
     ((219, 172, 239), Bead.purple),
     ((239, 239, 239), Bead.other),
