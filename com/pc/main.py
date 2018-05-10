@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import autopy
 import win32api
 import win32gui
@@ -57,7 +59,8 @@ def quitThisGame(gameLoc):
 
 
 def printPC(str):
-    print(str)
+    # print(str)
+    pass
 
 
 replaceSet5 = set()
@@ -141,7 +144,7 @@ def beginGame():
             gongzhupoint1 = False
             gongzhupoint2 = False
             count_games += 1
-            print("游戏次数%s" % (count_games))
+            print("游戏次数%s%s" % (count_games,datetime.now()))
             sleepLong()
             continue
         # 重试  按钮
