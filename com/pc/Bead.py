@@ -2,7 +2,7 @@ from enum import Enum, unique
 
 @unique
 class Bead(Enum):
-    bule = 0  # Sun的value被设定为0
+    blue = 0  # Sun的value被设定为0
     gray = 1
     green = 2
     purple = 3

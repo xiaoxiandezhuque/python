@@ -69,19 +69,36 @@ from autopy.mouse import Button
 import random
 from com.pc.bean import ReplacePoint
 
-def fang():
 
+def fang():
     pass
 
 
+def cleanSet(pointSet, newSet):
+    point = pointSet.pop()
+    newSet.add(point)
+    removeSet = set()
+    if pointSet:
+        for p in pointSet:
+            if abs(point[0] - p[0]) <= 3 and abs(point[1] - p[1]) <= 3:
+                removeSet.add(p)
+    else:
+        return
+    pointSet -= removeSet
+    cleanSet(pointSet, newSet)
+
+
 if __name__ == "__main__":
-
-    a = ReplacePoint(1,1,1)
-    b = ReplacePoint(1,1,1)
-    print(a==b)
-    print(a.__dict__== b.__dict__)
-    print(a.__dict__)
-
+    # pointSet = set([(1, 2), (1, 3), (33, 33), (44, 33), (33, 34)])
+    # newSet = set()
+    # cleanSet(pointSet, newSet)
+    # print(newSet)
+    beadList = [[0] * 8 for row in range(8)]
+    print(beadList)
+    if beadList[0][0]:
+        print("111")
+    else:
+        print("222")
     # a = fang()
     # if not a:
     #     print(a)

@@ -55,6 +55,37 @@ def getLoc(srcimg, findimg):
     # cv.imwrite('res.png', img_rgb)
 
 
+def getAllLoc(srcimg, findimg):
+    img_rgb = cv.imread(srcimg)
+    img_gray = cv.cvtColor(img_rgb, cv.COLOR_BGR2GRAY)
+    template = cv.imread(findimg, 0)
+    w, h = template.shape[::-1]
+    res = cv.matchTemplate(img_gray, template, cv.TM_CCOEFF_NORMED)
+    threshold = 0.8
+    loc = np.where(res >= threshold)
+
+    pointSet = set()
+    newSet = set()
+    for pt in zip(*loc[::-1]):
+        pointSet.add((pt[0] + int(w / 2), pt[1] + int(h / 2)))
+        # print(pt)
+    cleanSet(pointSet,newSet)
+    return  newSet
+
+def cleanSet(pointSet, newSet):
+    if pointSet:
+        point = pointSet.pop()
+        newSet.add(point)
+        removeSet = set()
+        for p in pointSet:
+            if abs(point[0] - p[0]) <= 3 and abs(point[1] - p[1]) <= 3:
+                removeSet.add(p)
+    else:
+        return
+    pointSet -= removeSet
+    cleanSet(pointSet, newSet)
+
+
 # 得到第一次找到文字的位置
 def getWordLoc(imgpath, findtext, index=1):
     # 上面都是导包，只需要下面这一行就能实现图片文字识别
@@ -76,4 +107,4 @@ def getWordLoc(imgpath, findtext, index=1):
 
 
 if __name__ == "__main__":
-    print(getWordLoc("1.png", "密",2))
+    print(getWordLoc("1.png", "密", 2))
