@@ -161,7 +161,7 @@ def beginGame():
         # continue
 
         # 需要刷的石头城市 点击
-        btnNext = findpic.getLoc(img_src, "./img/needshitou.png")
+        btnNext = findpic.getLoc(img_src, "./img/chengshi.png")
         if btnNext:
             printPC("点击刷的城市")
             pcclick.downPoint(btnNext)
@@ -299,18 +299,23 @@ def beginGame():
         # color = contrast_color.get_color(pointColor)
         # print(color)
         # exit()
-        beadList = [[0] * 8 for row in range(8)]
         beginX = gameLoc[0] + cPoint[0]
         beginY = gameLoc[1] + cPoint[1]
-        # 识别图片中的球
-        for i in range(8):
-            for j in range(8):
-                # 找点的颜色  进行匹配，区分出是什么珠子
-                pointColor = srcImage.getpixel((beginX + 59 * i, beginY + 59 * j))
-                color = contrast_color.get_color(pointColor)
-                # print(color)
-                # if baseBeadList[i][j] == color:
-                beadList[i][j] = color
+
+        beadList = distinguishBead(img_src,beginX,beginY)
+        # beadList = [[0] * 8 for row in range(8)]
+
+
+
+        # # 识别图片中的球
+        # for i in range(8):
+        #     for j in range(8):
+        #         # 找点的颜色  进行匹配，区分出是什么珠子
+        #         pointColor = srcImage.getpixel((beginX + 59 * i, beginY + 59 * j))
+        #         color = contrast_color.get_color(pointColor)
+        #         # print(color)
+        #         # if baseBeadList[i][j] == color:
+        #         beadList[i][j] = color
 
                 # if i==2 and j==5:
                 #     print((beginX + 59 * i, beginY + 59 * j))
@@ -471,8 +476,8 @@ def tesTFindBead():
 
 
 if __name__ == "__main__":
-    # beginGame()
-    tesTFindBead()
+    beginGame()
+    # tesTFindBead()
     # beadList = tesTFindBead()
     # replaceSet5, replaceSet4, replaceSet3 = findbead.find345(beadList)
     # for beadPoint in replaceSet5:
