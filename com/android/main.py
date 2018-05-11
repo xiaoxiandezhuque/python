@@ -1,8 +1,8 @@
 import os
 import time
 
-import findpic
-import adbshell
+from com.android import findpic
+from com.android import adbshell
 
 
 def saveScreenshot(name):

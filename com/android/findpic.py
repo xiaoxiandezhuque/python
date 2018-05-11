@@ -51,11 +51,21 @@ def getLoc(srcimg, findimg):
     loc = np.where(res >= threshold)
     for pt in zip(*loc[::-1]):
         # cv.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0, 0, 255), 2)
-        return (random.randrange(pt[0], pt[0] + w), random.randrange(pt[1], pt[1] + h))
-    # cv.imwrite('res.png', img_rgb)
+        if w > 10 and h > 10:
+            data = (
+            round(random.uniform(pt[0] + 5, pt[0] + w - 5), 5), round(random.uniform(pt[1] + 5, pt[1] + h - 5), 5))
+        else:
+            data = (round(random.uniform(pt[0], pt[0] + w), 5), round(random.uniform(pt[1], pt[1] + h), 5))
+
+        return
+
+        # cv.imwrite('res.png', img_rgb)
+
+        # 得到第一次找到文字的位置
 
 
-# 得到第一次找到文字的位置
+
+
 def getWordLoc(imgpath, findtext, index=1):
     # 上面都是导包，只需要下面这一行就能实现图片文字识别
     text = pytesseract.image_to_data(Image.open(imgpath), lang='chi_sim')
@@ -76,4 +86,4 @@ def getWordLoc(imgpath, findtext, index=1):
 
 
 if __name__ == "__main__":
-    print(getWordLoc("1.png", "密",2))
+    print(getWordLoc("1.png", "密", 2))
