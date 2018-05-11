@@ -1,12 +1,15 @@
 import os
+import random
 
 
 def tap(pointX, pointY):
-    os.system("adb shell input tap %s %s" % (pointX, pointY))
+    # os.system("adb shell input tap %s %s" % (pointX, pointY))
+    os.system("adb shell input swipe %s %s %s %s  %s" % (pointX, pointX, pointY, pointY, random.randrange(80, 200)))
 
 
 def input(str):
     os.system("adb shell input text %s" % (str))
+
 
 #  3  home   4 back
 def tapKey(keyevent):
@@ -14,8 +17,11 @@ def tapKey(keyevent):
 
 
 def swipe(fromX, fromY, toX, toY):
-    os.system("adb shell input swipe %s %s %s %s" % (fromX, fromY, toX, toY))
+    a = fromY - fromX
+    os.system("adb shell input swipe %s %s %s %s  %s" % (
+        fromX, fromY, toX, toY, random.randrange(a if a > 80 else 80, 1000)))
 
 
 if __name__ == "__main__":
-   tapKey(5)
+    tap(100, 200)
+    swipe(100, 300, 100, 300)

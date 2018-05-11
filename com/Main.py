@@ -89,16 +89,20 @@ def cleanSet(pointSet, newSet):
 
 
 if __name__ == "__main__":
+
+    for i in range(10):
+        print(round(random.uniform(0,32), 5))
+
     # pointSet = set([(1, 2), (1, 3), (33, 33), (44, 33), (33, 34)])
     # newSet = set()
     # cleanSet(pointSet, newSet)
     # print(newSet)
-    beadList = [[0] * 8 for row in range(8)]
-    print(beadList)
-    if beadList[0][0]:
-        print("111")
-    else:
-        print("222")
+    # beadList = [[0] * 8 for row in range(8)]
+    # print(beadList)
+    # if beadList[0][0]:
+    #     print("111")
+    # else:
+    #     print("222")
     # a = fang()
     # if not a:
     #     print(a)
