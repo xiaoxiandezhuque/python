@@ -1,7 +1,7 @@
 import os
 
 if __name__ == "__main__":
-    filePath = r"E:\work\waibao_wuliu\ui\服务界面\切图"
+    filePath = r"E:\work\waibao_wuliu\ui\报事详情\报事详情页切图"
     fileNames = os.listdir(filePath)
     print(fileNames)
     for file in fileNames:
