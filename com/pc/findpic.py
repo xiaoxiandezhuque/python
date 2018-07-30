@@ -89,10 +89,15 @@ def cleanSet(pointSet, newSet):
 # 得到第一次找到文字的位置
 def getWordLoc(imgpath, findtext, index=1):
     # 上面都是导包，只需要下面这一行就能实现图片文字识别
+<<<<<<< HEAD
+    text = pytesseract.image_to_string(Image.open(imgpath), lang='chi_sim')
+=======
     text = pytesseract.image_to_data(Image.open(imgpath), lang='chi_sim')
     print(text)
+>>>>>>> 4cf81f25ba1243729f5ce945644e2a9629ca80a5
     a = text.split("	")
     count = 0
+    print(a)
     for i in range(0, len(a)):
         if (findtext in a[i]) and ((i - 5) >= 0):
             count += 1
@@ -108,6 +113,11 @@ def getWordLoc(imgpath, findtext, index=1):
 
 
 if __name__ == "__main__":
+<<<<<<< HEAD
+
+   getWordLoc("1.png", "密", 2)
+=======
     # print(getWordLoc("1.png", "密", 2))
     text = pytesseract.image_to_string(Image.open("git1.png"), lang='chi_sim')
     print(text)
+>>>>>>> 4cf81f25ba1243729f5ce945644e2a9629ca80a5
