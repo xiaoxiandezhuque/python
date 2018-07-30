@@ -4,7 +4,7 @@ import random
 
 def tap(pointX, pointY):
     # os.system("adb shell input tap %s %s" % (pointX, pointY))
-    os.system("adb shell input swipe %s %s %s %s  %s" % (pointX, pointX, pointY, pointY, random.randrange(80, 200)))
+    os.system("adb shell input swipe %s %s %s %s  %s" % (pointX, pointY, pointX, pointY, random.randrange(80, 200)))
 
 
 def input(str):
