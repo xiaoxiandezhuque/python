@@ -11,16 +11,6 @@ def saveScreenshot(name):
     os.system(r"adb pull /sdcard/%s C:\work\python\com\android\moling\img" % name)  # 导出图片
 
 
-def sleepLittle():
-    time.sleep(random.randrange(2000, 3000) / 1000)
-
-
-def sleepLong():
-    time.sleep(random.randrange(5000, 10000) / 1000)
-
-
-def sleepGameTime():
-    time.sleep(random.randrange(90000, 180000) / 1000)
 
 def sleepLittle():
     time.sleep(random.randrange(2000, 3000) / 1000)

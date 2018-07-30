@@ -106,4 +106,5 @@ def getWordLoc(imgpath, findtext, index=1):
 
 
 if __name__ == "__main__":
-    print(getWordLoc("1.png", "密", 2))
+    # print(getWordLoc("1.png", "密", 2))
+     getLoc("./yaoshenji/img/kaizhan.png", "./yaoshenji/img/kaizhan.png")

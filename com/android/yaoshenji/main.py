@@ -8,7 +8,8 @@ from com.android import adbshell
 
 def saveScreenshot(name):
     os.system("adb shell screencap -p /sdcard/%s" % name)  # 截屏
-    os.system(r"adb pull /sdcard/%s C:\work\python\com\android\yaoshenji\img" % name)  # 导出图片
+    # os.system(r"adb pull /sdcard/%s C:\work\python\com\android\yaoshenji\img" % name)  # 导出图片
+    os.system(r"adb pull /sdcard/%s E:\work\python\com\android\yaoshenji\img" % name)  # 导出图片
 
 
 def sleepLittle():
@@ -20,18 +21,7 @@ def sleepLong():
 
 
 def sleepGameTime():
-    time.sleep(random.randrange(90000, 180000) / 1000)
-
-def sleepLittle():
-    time.sleep(random.randrange(2000, 3000) / 1000)
-
-
-def sleepLong():
-    time.sleep(random.randrange(5000, 10000) / 1000)
-
-
-def sleepGameTime():
-    time.sleep(random.randrange(27000, 30000) / 1000)
+    time.sleep(random.randrange(23000, 25000) / 1000)
 
 
 def getRandomNumber(fromNum, toNum):
@@ -53,9 +43,10 @@ if __name__ == "__main__":
     print(machineStr)
     if ("device" not in machineStr):
         exit("还没连接到设备")
-    # 获取当前的屏幕截图
 
+    #adb.exe connect 127.0.0.1:62001
     while True:
+        # 获取当前的屏幕截图
         saveScreenshot("1.png")
 
         playPoint = findpic.getLoc(src_img, "./img/kaizhan.png")
@@ -73,9 +64,9 @@ if __name__ == "__main__":
             continue
         playPoint = findpic.getLoc(src_img, "./img/100baozi.png")
         if playPoint:
-            #这图只能找到30包子   通过+y坐标来点击100包子
+            # 这图只能找到30包子   通过+y坐标来点击100包子
             printThis("点击  点击100包子补充体力 按钮")
-            adbshell.tap(playPoint[0], playPoint[1])#+113
+            adbshell.tap(playPoint[0], playPoint[1] + 113)  # +113
             sleepLong()
             continue
 
@@ -87,15 +78,16 @@ if __name__ == "__main__":
             continue
 
         printThis("游戏成功")
-        adbshell.tap(getRandomNumber(600,1000),getRandomNumber(600,700))
+        adbshell.tap(getRandomNumber(600, 1000), getRandomNumber(600, 700))
         sleepLittle()
-        printThis("随便点击一下")
-        adbshell.tap(getRandomNumber(600,1000),getRandomNumber(600,700))
-        sleepLong()
-        printThis("进入")
-        adbshell.tap(getRandomNumber(754,1000),getRandomNumber(544,644))
-        sleepLong()
-        printThis("进入")
-        adbshell.tap(getRandomNumber(754,1000),getRandomNumber(544,644))
-        sleepLong()
 
+
+        # printThis("随便点击一下")
+        # adbshell.tap(getRandomNumber(600,1000),getRandomNumber(600,700))
+        # sleepLong()
+        # printThis("进入")
+        # adbshell.tap(getRandomNumber(754,1000),getRandomNumber(544,644))
+        # sleepLong()
+        # printThis("进入")
+        # adbshell.tap(getRandomNumber(754,1000),getRandomNumber(544,644))
+        # sleepLong()
