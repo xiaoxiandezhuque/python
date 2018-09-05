@@ -1,14 +1,27 @@
 import os
 
-if __name__ == "__main__":
-    filePath = r"E:\work\waibao_wuliu\ui\报事详情\报事详情页切图"
-    fileNames = os.listdir(filePath)
-    print(fileNames)
-    for file in fileNames:
+basePath = r"C:\Users\Administrator\Desktop\详情页图标"
 
-        if (file.find(".png") != -1):
-            if (file.find("@2x") != -1):
+index = 1
+
+
+def renamefile(path):
+    global index
+    fileNames = os.listdir(path)
+    # print(fileNames)
+    for fileName in fileNames:
+        if os.path.isdir(path + "\\" + fileName):
+            renamefile(path + "\\" + fileName)
+            pass
+        elif (fileName.find(".png") != -1):
+            if (fileName.find("@2x") != -1):
                 # pass
-                os.rename(filePath + "\\" + file, filePath + "\\" + file.replace("@2x", ""))
+                os.rename(path + "\\" + fileName, basePath + "\\" + fileName.replace("@2x", "%s" % (index)))
+                index += 1;
             else:
-                os.remove(filePath + "\\" + file)
+                os.remove(path + "\\" + fileName)
+
+
+if __name__ == "__main__":
+    renamefile(basePath)
+pass
