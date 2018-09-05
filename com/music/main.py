@@ -10,7 +10,7 @@ def play():
     pygame.time.delay(1000)
     pygame.mixer.music.load(filename)
     pygame.mixer.music.play()
-    time.sleep(30)
+    time.sleep(120)
     # exit("播放结束")
 
     #     for event in pygame.event.get():

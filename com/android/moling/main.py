@@ -147,21 +147,41 @@ def shuaLong():
 # 困难2552经验一次 大概33次   33*4=132体力  84216经验 3星
 # 2星怪  15次
 # 3900经验 地狱  2星 10次   3星 22次   4星50次   6
-count = 6
-all = 50
+count = 1
+all = 55  # 55
 countMoney = 0
-allMoney = 100  # 控制买几管体力
+allMoney = 0  # 控制买几管体力
+
+countFail = 0  # 失败次数
+out_time = 900
+game_begin_agein = 0
 
 
 def countGame():
-    global count, all
+    global count, all, game_begin_agein
+
+    game_begin_agein = time.time()
     count += 1
     print("游戏次数   " + str(count))
+    print("游戏失败次数   " + str(countFail))
     if count >= all:
-        musicPlay.play()
-        exit("满级了")
-    # time.sleep(random.randrange(35000, 40000) / 1000) #2星
-    time.sleep(random.randrange(60000, 70000) / 1000) #3星
+        exitPrint("游戏的次数已到上限")
+    # time.sleep(random.randrange(35000, 40000) / 1000)  # 2星
+    time.sleep(random.randrange(50000, 60000) / 1000)  # 3星
+    # time.sleep(random.randrange(110000, 130000) / 1000)  # 魔力
+    # time.sleep(random.randrange(180000, 200000) / 1000)  # 巨人7层
+    # time.sleep(random.randrange(300000, 320000) / 1000)  # 巨人10层
+
+
+def exitPrint(content):
+    print("---------------------------------------")
+    print("当前游戏次数" + str(count))
+    print("游戏失败次数" + str(countFail))
+    print("购买体力次数" + str(countMoney))
+    print("游戏结束时间" + time.strftime("%H:%M:%S"))
+    print(content)
+    musicPlay.play()
+    exit(content)
 
 
 if __name__ == "__main__":
@@ -173,7 +193,7 @@ if __name__ == "__main__":
     if ("device" not in machineStr):
         exit("还没连接到设备")
     # 获取当前的屏幕截图
-
+    game_begin_agein = time.time()
     while True:
         saveScreenshot("1.png")
         # break
@@ -206,8 +226,8 @@ if __name__ == "__main__":
             count -= 1
             countMoney += 1
             if countMoney > allMoney:
-                musicPlay.play()
-                exit("不能再买体力了 兄弟")
+                exitPrint("不能再买体力了 兄弟")
+
             adbshell.tap(playPoint[0], playPoint[1])
             sleepLittle()
             adbshell.tap(getRandomNumber(444, 616), getRandomNumber(266, 460))
@@ -242,6 +262,13 @@ if __name__ == "__main__":
             adbshell.tap(playPoint[0], playPoint[1])
             sleepLong()
             continue
+        playPoint = findpic.getLoc(src_img, "./img/zhandouzhunb.png")
+        if playPoint:
+            printThis("战斗失败之后的战斗准备")
+            countFail += 1
+            adbshell.tap(playPoint[0], playPoint[1])
+            sleepLong()
+            continue
 
         playPoint = findpic.getLoc(src_img, "./img/shi.png")
         if playPoint:
@@ -249,6 +276,12 @@ if __name__ == "__main__":
             adbshell.tap(playPoint[0], playPoint[1])
             sleepLittle()
             continue
+        # playPoint = findpic.getLoc(src_img, "./img/get.png")
+        # if playPoint:
+        #     printThis("获得道具")
+        #     adbshell.tap(playPoint[0], playPoint[1])
+        #     sleepLittle()
+        #     continue
         playPoint = findpic.getLoc(src_img, "./img/chushou1.png")
         if playPoint:
             printThis("出售")
@@ -277,6 +310,9 @@ if __name__ == "__main__":
             adbshell.tap(getRandomNumber(700, 930), getRandomNumber(430, 500))
             sleepLittle()
             continue
+
+        if (time.time() - game_begin_agein > out_time):
+            exitPrint("游戏超时")
 
         printThis("随便点击一下")
         adbshell.tap(getRandomNumber(500, 600), getRandomNumber(60, 500))
