@@ -1,3 +1,7 @@
+from tkinter import *
+from tkinter import ttk
+import time
+import threading
 import os
 import random
 import time
@@ -9,7 +13,6 @@ from com.music import main as musicPlay
 
 def saveScreenshot(name):
     os.system("adb -s 127.0.0.1:62001 shell screencap -p /sdcard/%s" % name)  # 截屏
-    # os.system(r"adb pull /sdcard/%s C:\work\python\com\android\moling\img" % name)  # 导出图片
     os.system(r"adb -s 127.0.0.1:62001 pull /sdcard/%s %s\img" % (name, os.getcwd()))  # 导出图片
 
 
@@ -26,11 +29,9 @@ def getRandomNumber(fromNum, toNum):
 
 
 def printThis(str):
+    lb.insert(END,str)
     print(str)
 
-
-# 982,588    1070，650
-src_img = "./img/1.png"
 
 # 4星  76次
 # 困难2552经验一次 大概33次   33*4=132体力  84216经验 3星
@@ -48,36 +49,27 @@ game_begin_agein = 0
 
 
 def countGame():
-    global count, all, game_begin_agein
-
+    global count, all, game_begin_agein, sleepTime
     game_begin_agein = time.time()
     count += 1
-    print("游戏次数   " + str(count))
-    print("游戏失败次数   " + str(countFail))
-    print("购买体力次数" + str(countMoney))
+    setLabelText(count, countFail, countMoney, "还没退出")
     if count >= all:
         exitPrint("游戏的次数已到上限")
-    # time.sleep(random.randrange(35000, 40000) / 1000)  # 2星
-    # time.sleep(random.randrange(45000, 50000) / 1000)  # 3星
-    # time.sleep(random.randrange(110000, 130000) / 1000)  # 魔力
-    # time.sleep(random.randrange(180000, 200000) / 1000)  # 巨人7层
-    time.sleep(random.randrange(220000, 240000) / 1000)  # 巨人10层
+    time.sleep(random.randrange(sleepTime * 1000, (sleepTime + 10) * 1000) / 1000)
 
 
 def exitPrint(content):
-    print("---------------------------------------")
-    print("当前游戏次数" + str(count))
-    print("游戏失败次数" + str(countFail))
-    print("购买体力次数" + str(countMoney))
-    print("游戏结束时间" + time.strftime("%H:%M:%S"))
-    print(content)
-    # musicPlay.play()
-    exit(content)
+    setLabelText(count, countFail, countMoney, content)
+    btn_begin['bg'] = "white"
+    btn_end['bg'] = "red"
+    global isBengin
+    isBengin = False
 
 
 def beginGame():
-    global src_img, count, all, countMoney, allMoney, countFail, out_time, game_begin_agein
+    global count, all, countMoney, allMoney, countFail, out_time, game_begin_agein, isBengin
     # 判断链接设备
+    src_img = "./img/1.png"
     machine = os.popen("adb devices")
     machineStr = machine.read()
     print(machineStr)
@@ -86,30 +78,9 @@ def beginGame():
     # 获取当前的屏幕截图
     game_begin_agein = time.time()
     while True:
+        if (not isBengin):
+            return
         saveScreenshot("1.png")
-        #  战斗
-        # playPoint = findpic.getLoc(src_img, "./img/play.png")
-        # if playPoint:
-        #     printThis("点击  战斗 按钮")
-        #     adbshell.tap(playPoint[0], playPoint[1])
-        #     sleepLittle()
-        #     adbshell.swipe(getRandomNumber(1000, 1100), getRandomNumber(500, 600), getRandomNumber(500, 550),
-        #                    getRandomNumber(500, 600))
-        #     sleepLittle()
-        #     adbshell.swipe(getRandomNumber(1000, 1100), getRandomNumber(500, 600), getRandomNumber(500, 550),
-        #                    getRandomNumber(500, 600))
-        #     sleepLittle()
-        #     continue
-        #
-        # playPoint = findpic.getLoc(src_img, "./img/huoshan.png")
-        # if playPoint:
-        #     printThis("点击  火山 按钮")
-        #     adbshell.tap(playPoint[0], playPoint[1])
-        #     sleepLittle()
-        #     adbshell.tap(getRandomNumber(1143, 1208), getRandomNumber(228, 286))
-        #     sleepLittle()
-        #     continue
-
         playPoint = findpic.getLoc(src_img, "./img/dakaishangdian.png")
         if playPoint:
             printThis("打开商店   购买体力")
@@ -152,6 +123,7 @@ def beginGame():
             adbshell.tap(playPoint[0], playPoint[1])
             sleepLong()
             continue
+
         playPoint = findpic.getLoc(src_img, "./img/zhandouzhunb.png")
         if playPoint:
             printThis("战斗失败之后的战斗准备")
@@ -160,12 +132,12 @@ def beginGame():
             sleepLong()
             continue
 
-        # playPoint = findpic.getLoc(src_img, "./img/shi.png")
-        # if playPoint:
-        #     printThis("确定出售的  是 按钮")
-        #     adbshell.tap(playPoint[0], playPoint[1])
-        #     sleepLittle()
-        #     continue
+        playPoint = findpic.getLoc(src_img, "./img/shi.png")
+        if playPoint:
+            printThis("确定出售的  是 按钮")
+            adbshell.tap(playPoint[0], playPoint[1])
+            sleepLittle()
+            continue
         playPoint = findpic.getLoc(src_img, "./img/get.png")
         if playPoint:
             printThis("获得道具")
@@ -207,18 +179,130 @@ def beginGame():
         printThis("随便点击一下")
         adbshell.tap(getRandomNumber(500, 600), getRandomNumber(60, 500))
         sleepLong()
-
         pass
 
-    # adbshell.tap("30.6061","460.6061")
-    # 匹配截图和目标图片
-    # loc = findpic.getLoc("./img/1.png", "wx.png")
-    # if loc:
-    #     adbshell.tap(loc[0], loc[1])
-    # else:
-    #     print('没有找到匹配的图片')
-    #
-    # adbshell.tap(257, 421)
-    # adbshell.input("1111")
-    # time.sleep(2)
-    # print("完成")
+
+tk = Tk()
+tk.title("魔灵")
+isBengin = False
+
+
+# tk.geometry("400x400")
+# tk.resizable(False, False)
+
+
+def close():
+    time.sleep(3)
+    tk.quit()
+
+
+def createLabelAndEntry(labelText):
+    fm = Frame(tk, bg="white", padx=15, pady=8)
+    Label(fm, text=labelText, bg="white", width=20).pack(side=LEFT)
+    e = StringVar()
+    Entry(fm, textvariable=e, width=20).pack(side=LEFT, fill=X, expand=YES)
+    fm.pack(side=TOP, fill=X)
+    return e
+
+
+def createLabel(fm):
+    label = Label(fm, text="", bg="white", width=30, height=10, justify=LEFT)
+    label.pack(side=LEFT, expand=NO)
+    return label
+
+
+def setLabelText(allCount, failCount, bugCount, exitReason):
+    label['text'] = "总次数:　　　　%s\n" \
+                    "失败次数:　　　%s\n" \
+                    "购买体力次数:　%s\n" \
+                    "上次记录时间:　%s\n" \
+                    "退出原因:　　　%s\n" \
+                    % (allCount, failCount, bugCount, time.strftime("%H:%M:%S"), exitReason)
+
+
+def createList(fm):
+    lb = Listbox(fm, width=20, height=10)
+    lb.pack(side=LEFT)
+    sl = ttk.Scrollbar(fm)
+    sl.pack(side=LEFT, fill=Y)
+    sl['command'] = lb.yview
+    return lb
+
+
+def crtateBtn():
+    global btn_begin, btn_end
+    fm = Frame(tk, bg="white")
+    btn_huoshan = Button(fm, text="设置为默认火山地狱", command=clickHuoshan).pack(side=LEFT, fill=X, expand=NO)
+    btn_juren = Button(fm, text="设置为默认巨人10", command=clickJuren).pack(side=LEFT, fill=X, expand=NO, padx=20)
+    fm.pack(side=TOP, fill=X, ipady=20, ipadx=20)
+
+    btn_begin = Button(tk, text="开始", command=clickBegin, height=2)
+    btn_begin.pack(side=TOP, fill=X, pady=8)
+    btn_end = Button(tk, text="结束", command=clickEnd, height=2)
+    btn_end.pack(side=TOP, fill=X)
+
+
+def clickHuoshan():
+    eSV1.set("45")
+
+
+def clickJuren():
+    eSV1.set("220")
+
+
+def clickBegin():
+    global sleepTime, all, allMoney, out_time, isBengin
+    if (eSV1.get() and eSV2.get() and eSV3.get() and eSV4.get()):
+        lb.delete(0, END)  # 清空列表
+        setLabelText(0, 0, 0, "开始了")
+        btn_begin['bg'] = "red"
+        btn_end['bg'] = "white"
+        sleepTime = int(eSV1.get())
+        allMoney = int(eSV2.get())
+        all = int(eSV3.get())
+        out_time = int(eSV4.get())
+        isBengin = True
+        tThread = threading.Thread(target=beginGame)
+        tThread.setDaemon(True)
+        tThread.start()
+
+
+def clickEnd():
+
+    exitPrint("手动结束")
+
+
+def setDefult():
+    eSV1.set("220")
+    eSV2.set("4")
+    eSV3.set("220")
+    eSV4.set("900")
+    setLabelText(0, 0, 0, "还没有开始")
+
+
+eSV1 = createLabelAndEntry("沉睡时间")
+eSV2 = createLabelAndEntry("购买体力次数")
+eSV3 = createLabelAndEntry("重复的最大次数")
+eSV4 = createLabelAndEntry("超时时间")
+
+fmLabel = Frame(tk, bg="white", padx=15, pady=8)
+label = createLabel(fmLabel)
+lb = createList(fmLabel)
+fmLabel.pack(side=TOP, fill=X)
+
+crtateBtn()
+
+setDefult()
+
+# Label(app, text=e.get(), bg="white").pack(side=LEFT)
+# canvas = Canvas(tk, width=400, height=400, bg='white')
+# canvas.pack()
+# crtateBtn(tk)
+
+# b = Button(tk,Text ="ok",COMMAND=callback())
+# btn_juren = Button(tk, text="巨人10", command=callback).pack(side=TOP, anchor=W, fill=X, expand=NO)
+# # btn_huoshan = Button(tk, text="火山地狱", command=callback).pack()
+
+# t = threading.Thread(target=close)
+# t.start()
+tk.mainloop()
