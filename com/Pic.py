@@ -15,10 +15,11 @@ con = requests.get(url)
 content = con.text
 reg = r"http://img.*?\.tooopen.com/images/.*?\.jpg"
 
-a = re.findall(reg, content, re.S)[0]
-print(a)
+a = re.findall(reg, content, re.S)
+for imgurl in a:
+    print(imgurl)
 
-read = requests.get(a)
-f = open('%s.jpg' % local, 'wb')
-f.write(read.content)
-f.close()
+# read = requests.get(a)
+# f = open('%s.jpg' % local, 'wb')
+# f.write(read.content)
+# f.close()
