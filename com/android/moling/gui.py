@@ -7,7 +7,6 @@ import time
 
 from com.android import findpic
 from com.android import adbshell
-from com.android.moling.gui import isGet
 from com.music import main as musicPlay
 
 isGet = True
@@ -71,12 +70,12 @@ def exitPrint(content):
 def beginGame():
     global count, all, countMoney, allMoney, countFail, out_time, game_begin_agein, isBengin, isGet
     # 判断链接设备
-    src_img = "./img/1.png"
+    src_img = "%s/img/1.png" % os.getcwd()
     machine = os.popen("adb devices")
     machineStr = machine.read()
-    print(machineStr)
+    setLabelText(count, countFail, countMoney,machineStr)
     if ("device" not in machineStr):
-        exit("还没连接到设备")
+        exitPrint("还没连接到设备")
     # 获取当前的屏幕截图
     game_begin_agein = time.time()
     while True:
@@ -90,7 +89,7 @@ def beginGame():
             countMoney += 1
             if countMoney > allMoney:
                 exitPrint("不能再买体力了 兄弟")
-                return 
+                return
 
             adbshell.tap(playPoint[0], playPoint[1])
             sleepLittle()
@@ -229,7 +228,7 @@ def setLabelText(allCount, failCount, bugCount, exitReason):
 def createList(fm):
     lb = Listbox(fm, width=20, height=10)
     lb.pack(side=LEFT)
-    sl = ttk.Scrollbar(fm)
+    sl = Scrollbar(fm)
     sl.pack(side=LEFT, fill=Y)
     sl['command'] = lb.yview
     return lb

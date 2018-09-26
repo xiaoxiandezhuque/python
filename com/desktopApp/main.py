@@ -6,9 +6,7 @@ import os
 import random
 import time
 
-from com.android import findpic
-from com.android import adbshell
-from com.music import main as musicPlay
+
 
 tk = Tk()
 tk.title("魔灵")
