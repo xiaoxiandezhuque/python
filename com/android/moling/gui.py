@@ -1,6 +1,5 @@
 from tkinter import *
 from tkinter import ttk
-import time
 import threading
 import os
 import random
@@ -8,7 +7,10 @@ import time
 
 from com.android import findpic
 from com.android import adbshell
+from com.android.moling.gui import isGet
 from com.music import main as musicPlay
+
+isGet = True
 
 
 def saveScreenshot(name):
@@ -29,7 +31,7 @@ def getRandomNumber(fromNum, toNum):
 
 
 def printThis(str):
-    lb.insert(END,str)
+    lb.insert(END, str)
     print(str)
 
 
@@ -67,7 +69,7 @@ def exitPrint(content):
 
 
 def beginGame():
-    global count, all, countMoney, allMoney, countFail, out_time, game_begin_agein, isBengin
+    global count, all, countMoney, allMoney, countFail, out_time, game_begin_agein, isBengin, isGet
     # 判断链接设备
     src_img = "./img/1.png"
     machine = os.popen("adb devices")
@@ -88,6 +90,7 @@ def beginGame():
             countMoney += 1
             if countMoney > allMoney:
                 exitPrint("不能再买体力了 兄弟")
+                return 
 
             adbshell.tap(playPoint[0], playPoint[1])
             sleepLittle()
@@ -138,18 +141,21 @@ def beginGame():
             adbshell.tap(playPoint[0], playPoint[1])
             sleepLittle()
             continue
-        playPoint = findpic.getLoc(src_img, "./img/get.png")
-        if playPoint:
-            printThis("获得道具")
-            adbshell.tap(playPoint[0], playPoint[1])
-            sleepLittle()
-            continue
-        # playPoint = findpic.getLoc(src_img, "./img/chushou1.png")
-        # if playPoint:
-        #     printThis("出售")
-        #     adbshell.tap(playPoint[0], playPoint[1])
-        #     sleepLittle()
-        #     continue
+        if (isGet):
+            playPoint = findpic.getLoc(src_img, "./img/get.png")
+            if playPoint:
+                printThis("获得道具")
+                adbshell.tap(playPoint[0], playPoint[1])
+                sleepLittle()
+                continue
+        else:
+            playPoint = findpic.getLoc(src_img, "./img/chushou1.png")
+            if playPoint:
+                printThis("出售")
+                adbshell.tap(playPoint[0], playPoint[1])
+                sleepLittle()
+                continue
+
         playPoint = findpic.getLoc(src_img, "./img/sure.png")
         if playPoint:
             printThis("确认")
@@ -232,8 +238,9 @@ def createList(fm):
 def crtateBtn():
     global btn_begin, btn_end
     fm = Frame(tk, bg="white")
-    btn_huoshan = Button(fm, text="设置为默认火山地狱", command=clickHuoshan).pack(side=LEFT, fill=X, expand=NO)
-    btn_juren = Button(fm, text="设置为默认巨人10", command=clickJuren).pack(side=LEFT, fill=X, expand=NO, padx=20)
+    Button(fm, text="设置为默认火山地狱", command=clickHuoshan).pack(side=LEFT, fill=X, expand=NO)
+    Button(fm, text="设置为默认巨人10", command=clickJuren).pack(side=LEFT, fill=X, expand=NO, padx=20)
+    Button(fm, text="保存设置", command=clickSave).pack(side=LEFT, fill=X, expand=NO)
     fm.pack(side=TOP, fill=X, ipady=20, ipadx=20)
 
     btn_begin = Button(tk, text="开始", command=clickBegin, height=2)
@@ -243,24 +250,33 @@ def crtateBtn():
 
 
 def clickHuoshan():
+    global isGet
     eSV1.set("45")
+    isGet = False
 
 
 def clickJuren():
+    global isGet
+    isGet = True
     eSV1.set("220")
 
 
+def clickSave():
+    global sleepTime, all, allMoney, out_time
+    sleepTime = int(eSV1.get())
+    allMoney = int(eSV2.get())
+    all = int(eSV3.get())
+    out_time = int(eSV4.get())
+
+
 def clickBegin():
-    global sleepTime, all, allMoney, out_time, isBengin
+    global isBengin
     if (eSV1.get() and eSV2.get() and eSV3.get() and eSV4.get()):
         lb.delete(0, END)  # 清空列表
         setLabelText(0, 0, 0, "开始了")
         btn_begin['bg'] = "red"
         btn_end['bg'] = "white"
-        sleepTime = int(eSV1.get())
-        allMoney = int(eSV2.get())
-        all = int(eSV3.get())
-        out_time = int(eSV4.get())
+        clickSave()
         isBengin = True
         tThread = threading.Thread(target=beginGame)
         tThread.setDaemon(True)
@@ -268,7 +284,6 @@ def clickBegin():
 
 
 def clickEnd():
-
     exitPrint("手动结束")
 
 
