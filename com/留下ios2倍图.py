@@ -1,6 +1,6 @@
 import os
 
-basePath = r"C:\Users\Administrator\Desktop\详情页图标"
+basePath = r"E:\work\waibao_wuliu\员工端\切图"
 
 index = 1
 
