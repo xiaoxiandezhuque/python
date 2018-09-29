@@ -73,7 +73,7 @@ def beginGame():
     src_img = "%s/img/1.png" % os.getcwd()
     machine = os.popen("adb devices")
     machineStr = machine.read()
-    setLabelText(count, countFail, countMoney,machineStr)
+    setLabelText(count, countFail, countMoney, machineStr)
     if ("device" not in machineStr):
         exitPrint("还没连接到设备")
     # 获取当前的屏幕截图
@@ -112,6 +112,12 @@ def beginGame():
             countGame()
             continue
             #  再来一次
+        playPoint = findpic.getLoc(src_img, "./img/xiayiceng.png")
+        if playPoint:
+            printThis("下一层")
+            adbshell.tap(playPoint[0], playPoint[1])
+            sleepLittle()
+            continue
         playPoint = findpic.getLoc(src_img, "./img/again.png")
         if playPoint:
             printThis("再来一次")
@@ -181,9 +187,9 @@ def beginGame():
         if (time.time() - game_begin_agein > out_time):
             exitPrint("游戏超时")
 
-        printThis("随便点击一下")
-        adbshell.tap(getRandomNumber(500, 600), getRandomNumber(60, 500))
-        sleepLong()
+        # printThis("随便点击一下")
+        # adbshell.tap(getRandomNumber(500, 600), getRandomNumber(60, 500))
+        # sleepLong()
         pass
 
 
