@@ -87,6 +87,7 @@ def beginGame():
     game_begin_agein = time.time()
     while True:
         saveScreenshot("1.png")
+        return
         #  战斗
         # playPoint = findpic.getLoc(src_img, "./img/play.png")
         # if playPoint:
@@ -222,3 +223,4 @@ def beginGame():
     # adbshell.input("1111")
     # time.sleep(2)
     # print("完成")
+beginGame()
