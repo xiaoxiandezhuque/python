@@ -189,7 +189,7 @@ def beginGame():
 
         # printThis("随便点击一下")
         # adbshell.tap(getRandomNumber(500, 600), getRandomNumber(60, 500))
-        # sleepLong()
+        sleepLong()
         pass
 
 
@@ -237,6 +237,7 @@ def createList(fm):
     sl = Scrollbar(fm)
     sl.pack(side=LEFT, fill=Y)
     sl['command'] = lb.yview
+    lb['yscrollcommand'] = sl.set
     return lb
 
 
