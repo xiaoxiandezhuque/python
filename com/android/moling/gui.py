@@ -65,7 +65,7 @@ def exitPrint(content):
     btn_end['bg'] = "red"
     global isBengin
     isBengin = False
-    musicPlay.play()
+    # musicPlay.play()
 
 
 def beginGame():
@@ -75,6 +75,8 @@ def beginGame():
     machine = os.popen("adb devices")
     machineStr = machine.read()
     setLabelText(count, countFail, countMoney, machineStr)
+    count = 0
+    countFail = 0
     if ("device" not in machineStr):
         exitPrint("还没连接到设备")
     # 获取当前的屏幕截图
@@ -245,9 +247,12 @@ def createList(fm):
 def crtateBtn():
     global btn_begin, btn_end
     fm = Frame(tk, bg="white")
-    Button(fm, text="设置为默认火山地狱", command=clickHuoshan).pack(side=LEFT, fill=X, expand=NO)
-    Button(fm, text="设置为默认巨人10", command=clickJuren).pack(side=LEFT, fill=X, expand=NO, padx=20)
-    Button(fm, text="保存设置", command=clickSave).pack(side=LEFT, fill=X, expand=NO)
+    Button(fm, text="地狱2x", command=clickHuoshan2).pack(side=LEFT, fill=X, expand=NO)
+    Button(fm, text="地狱3x", command=clickHuoshan3).pack(side=LEFT, fill=X, expand=NO)
+    Button(fm, text="地狱4x", command=clickHuoshan4).pack(side=LEFT, fill=X, expand=NO)
+    Button(fm, text="巨10", command=clickJuren).pack(side=LEFT, fill=X, expand=NO)
+    Button(fm, text="龙10", command=clickLong).pack(side=LEFT, fill=X, expand=NO)
+    Button(fm, text="保存设置", command=clickSave).pack(side=LEFT, fill=X, expand=NO, padx=20)
     fm.pack(side=TOP, fill=X, ipady=20, ipadx=20)
 
     btn_begin = Button(tk, text="开始", command=clickBegin, height=2)
@@ -256,16 +261,37 @@ def crtateBtn():
     btn_end.pack(side=TOP, fill=X)
 
 
-def clickHuoshan():
+def clickHuoshan2():
     global isGet
     eSV1.set("45")
+    eSV3.set("10")
+    isGet = False
+
+
+def clickHuoshan3():
+    global isGet
+    eSV1.set("45")
+    eSV3.set("22")
+    isGet = False
+
+
+def clickHuoshan4():
+    global isGet
+    eSV1.set("45")
+    eSV3.set("50")
     isGet = False
 
 
 def clickJuren():
     global isGet
     isGet = True
-    eSV1.set("200")
+    eSV1.set("180")
+
+
+def clickLong():
+    global isGet
+    isGet = True
+    eSV1.set("240")
 
 
 def clickSave():
