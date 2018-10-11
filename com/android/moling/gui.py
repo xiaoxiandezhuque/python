@@ -187,8 +187,8 @@ def beginGame():
         if (time.time() - game_begin_agein > out_time):
             exitPrint("游戏超时")
 
-        # printThis("随便点击一下")
-        # adbshell.tap(getRandomNumber(500, 600), getRandomNumber(60, 500))
+        printThis("随便点击一下")
+        adbshell.tap(getRandomNumber(300, 800), getRandomNumber(600, 700))
         sleepLong()
         pass
 
@@ -264,7 +264,7 @@ def clickHuoshan():
 def clickJuren():
     global isGet
     isGet = True
-    eSV1.set("220")
+    eSV1.set("200")
 
 
 def clickSave():
@@ -294,7 +294,7 @@ def clickEnd():
 
 
 def setDefult():
-    eSV1.set("220")
+    eSV1.set("200")
     eSV2.set("4")
     eSV3.set("220")
     eSV4.set("900")
