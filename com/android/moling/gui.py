@@ -65,6 +65,7 @@ def exitPrint(content):
     btn_end['bg'] = "red"
     global isBengin
     isBengin = False
+    musicPlay.play()
 
 
 def beginGame():
