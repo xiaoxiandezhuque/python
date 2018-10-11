@@ -30,7 +30,7 @@ def getRandomNumber(fromNum, toNum):
 
 
 def printThis(str):
-    # lb.insert(END, str)
+    lb.insert(END, str)
     print(str)
 
 
@@ -190,7 +190,7 @@ def beginGame():
         if (time.time() - game_begin_agein > out_time):
             exitPrint("游戏超时")
 
-        printThis("随便点击一下")
+        print("随便点击一下")
         adbshell.tap(getRandomNumber(300, 800), getRandomNumber(600, 700))
         sleepLong()
         pass
