@@ -30,7 +30,7 @@ def getRandomNumber(fromNum, toNum):
 
 
 def printThis(str):
-    lb.insert(END, str)
+    # lb.insert(END, str)
     print(str)
 
 
