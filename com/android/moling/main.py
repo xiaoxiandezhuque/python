@@ -223,4 +223,4 @@ def beginGame():
     # adbshell.input("1111")
     # time.sleep(2)
     # print("完成")
-beginGame()
+
