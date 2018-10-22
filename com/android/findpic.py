@@ -64,6 +64,27 @@ def getLoc(srcimg, findimg):
         # 得到第一次找到文字的位置
 
 
+def getAllLoc(srcimg, findimg):
+    img_rgb = cv.imread(srcimg)
+    img_gray = cv.cvtColor(img_rgb, cv.COLOR_BGR2GRAY)
+    template = cv.imread(findimg, 0)
+    w, h = template.shape[::-1]
+    res = cv.matchTemplate(img_gray, template, cv.TM_CCOEFF_NORMED)
+    threshold = 0.8
+    loc = np.where(res >= threshold)
+    dataSet = set()
+    for pt in zip(*loc[::-1]):
+        # cv.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0, 0, 255), 2)
+        if w > 10 and h > 10:
+            data = (
+                round(random.uniform(pt[0] + 5, pt[0] + w - 5), 5), round(random.uniform(pt[1] + 5, pt[1] + h - 5), 5))
+        else:
+            data = (round(random.uniform(pt[0], pt[0] + w), 5), round(random.uniform(pt[1], pt[1] + h), 5))
+        dataSet.add(data)
+
+    return dataSet
+
+
 # 模糊匹配，找到第一个匹配的点   用这个，有可能会失败
 def getCenterLoc(srcimg, findimg):
     img_rgb = cv.imread(srcimg)
@@ -77,7 +98,7 @@ def getCenterLoc(srcimg, findimg):
         # cv.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0, 0, 255), 2)
 
         data = (round(random.uniform(pt[0] + int(w / 2), pt[0] + int(w / 2) + 1), 5),
-                      round(random.uniform(pt[1] + int(h / 2), pt[1] + int(h / 2) + 1), 5))
+                round(random.uniform(pt[1] + int(h / 2), pt[1] + int(h / 2) + 1), 5))
 
         return data
 
@@ -107,4 +128,4 @@ def getWordLoc(imgpath, findtext, index=1):
 
 if __name__ == "__main__":
     # print(getWordLoc("1.png", "密", 2))
-     getLoc("./yaoshenji/img/kaizhan.png", "./yaoshenji/img/kaizhan.png")
+    getLoc("./yaoshenji/img/kaizhan.png", "./yaoshenji/img/kaizhan.png")
