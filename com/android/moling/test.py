@@ -10,15 +10,23 @@ def saveScreenshot(name):
     os.system(r"adb -s 127.0.0.1:62001 pull /sdcard/%s %s\img" % (name, os.getcwd()))  # 导出图片
 
 
+def takeSecond(elem):
+    return elem[0]
+
 
 if __name__ == "__main__":
     #  kill    force-stop
     #  先返回home  在 kill
     # os.system("adb -s 127.0.0.1:62025  shell am kill com.netease.my")
 
-
     # saveScreenshot("13.png")
-    src_img = "./img/12.png"
-    playPoint = findpic.getLoc(src_img, "./dengji25.png")
-    if playPoint:
-        print("x=" + str(playPoint[0]) + "    y=" + str(playPoint[1]))
+    # src_img = "./img/12.png"
+    # playPoint = findpic.getLoc(src_img, "./dengji25.png")
+    # if playPoint:
+    #     print("x=" + str(playPoint[0]) + "    y=" + str(playPoint[1]))
+    a = set({(3, 3), (2, 2)})
+    b = list(a)
+
+    b.sort(key=takeSecond)
+    print(b)
+    pass
