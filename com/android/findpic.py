@@ -64,6 +64,10 @@ def getLoc(srcimg, findimg):
         # 得到第一次找到文字的位置
 
 
+def takeFirst(pt):
+    return pt[0]
+
+
 def getAllLoc(srcimg, findimg):
     img_rgb = cv.imread(srcimg)
     img_gray = cv.cvtColor(img_rgb, cv.COLOR_BGR2GRAY)
@@ -72,17 +76,31 @@ def getAllLoc(srcimg, findimg):
     res = cv.matchTemplate(img_gray, template, cv.TM_CCOEFF_NORMED)
     threshold = 0.8
     loc = np.where(res >= threshold)
-    dataSet = set()
+    pointSet = set()
+
+    newSet = set()
+
     for pt in zip(*loc[::-1]):
-        # cv.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0, 0, 255), 2)
+        pointSet.add(pt)
+    #     # cv.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0, 0, 255), 2)
+    #     if w > 10 and h > 10:
+    #         data = (
+    #             round(random.uniform(pt[0] + 5, pt[0] + w - 5), 5), round(random.uniform(pt[1] + 5, pt[1] + h - 5), 5))
+    #     else:
+    #         data = (round(random.uniform(pt[0], pt[0] + w), 5), round(random.uniform(pt[1], pt[1] + h), 5))
+    #     dataSet.add(data)
+    cleanSet(pointSet, newSet)
+    dataSet = set()
+    for pt in newSet:
         if w > 10 and h > 10:
             data = (
                 round(random.uniform(pt[0] + 5, pt[0] + w - 5), 5), round(random.uniform(pt[1] + 5, pt[1] + h - 5), 5))
         else:
             data = (round(random.uniform(pt[0], pt[0] + w), 5), round(random.uniform(pt[1], pt[1] + h), 5))
         dataSet.add(data)
-
-    return dataSet
+    dataList = list(dataSet)
+    dataList.sort(key=takeFirst)
+    return dataList
 
 
 # 模糊匹配，找到第一个匹配的点   用这个，有可能会失败
@@ -126,6 +144,21 @@ def getWordLoc(imgpath, findtext, index=1):
                 #                 # break
 
 
+def cleanSet(pointSet, newSet):
+    if pointSet:
+        point = pointSet.pop()
+        newSet.add(point)
+        removeSet = set()
+        for p in pointSet:
+            if abs(point[0] - p[0]) <= 3 and abs(point[1] - p[1]) <= 3:
+                removeSet.add(p)
+    else:
+        return
+    pointSet -= removeSet
+    cleanSet(pointSet, newSet)
+
+
 if __name__ == "__main__":
     # print(getWordLoc("1.png", "密", 2))
-    getLoc("./yaoshenji/img/kaizhan.png", "./yaoshenji/img/kaizhan.png")
+    a = getAllLoc("./moling/img/11.png", "./moling/img/meiyoushangmoling.png")
+    print(a)

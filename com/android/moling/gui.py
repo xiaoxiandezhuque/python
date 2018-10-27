@@ -1,5 +1,4 @@
 from tkinter import *
-from tkinter import ttk
 import threading
 import os
 import random
@@ -7,26 +6,11 @@ import time
 
 from com.android import findpic
 from com.android import adbshell
-from com.music import main as musicPlay
+from com.android.moling import myUtils
+from com.android.moling.PlayGouLiang import PlayGouLiang
+from com.android.moling.PlayLong import PlayLong
 
 isGet = True
-
-
-def saveScreenshot(name):
-    os.system("adb -s 127.0.0.1:62001 shell screencap -p /sdcard/%s" % name)  # 截屏
-    os.system(r"adb -s 127.0.0.1:62001 pull /sdcard/%s %s\img" % (name, os.getcwd()))  # 导出图片
-
-
-def sleepLittle():
-    time.sleep(random.randrange(2000, 3000) / 1000)
-
-
-def sleepLong():
-    time.sleep(random.randrange(5000, 10000) / 1000)
-
-
-def getRandomNumber(fromNum, toNum):
-    return round(random.uniform(fromNum, toNum), 5)
 
 
 def printThis(str):
@@ -69,9 +53,10 @@ def exitPrint(content):
 
 
 def beginGame():
-    global count, all, countMoney, allMoney, countFail, out_time, game_begin_agein, isBengin, isGet
+    global count, all, countMoney, allMoney, countFail, out_time, game_begin_agein, isBengin, playWay,src_img
     # 判断链接设备
     src_img = "%s/img/1.png" % os.getcwd()
+    playWay = PlayLong(src_img)
     machine = os.popen("adb devices")
     machineStr = machine.read()
     setLabelText(count, countFail, countMoney, machineStr)
@@ -84,7 +69,7 @@ def beginGame():
     while True:
         if (not isBengin):
             return
-        saveScreenshot("1.png")
+        myUtils.saveScreenshot("1.png")
         playPoint = findpic.getLoc(src_img, "./img/dakaishangdian.png")
         if playPoint:
             printThis("打开商店   购买体力")
@@ -95,19 +80,22 @@ def beginGame():
                 return
 
             adbshell.tap(playPoint[0], playPoint[1])
-            sleepLittle()
-            adbshell.tap(getRandomNumber(444, 616), getRandomNumber(266, 460))
-            sleepLittle()
-            adbshell.tap(getRandomNumber(455, 600), getRandomNumber(416, 458))
-            sleepLittle()
-            adbshell.tap(getRandomNumber(578, 707), getRandomNumber(410, 460))
-            sleepLittle()
-            adbshell.tap(getRandomNumber(477, 701), getRandomNumber(600, 641))
-            sleepLittle()
-            adbshell.tap(getRandomNumber(581, 701), getRandomNumber(640, 641))
-            sleepLittle()
+            myUtils.sleepLittle()
+            adbshell.tap(myUtils.getRandomNumber(444, 616), myUtils.getRandomNumber(266, 460))
+            myUtils.sleepLittle()
+            adbshell.tap(myUtils.getRandomNumber(455, 600), myUtils.getRandomNumber(416, 458))
+            myUtils.sleepLittle()
+            adbshell.tap(myUtils.getRandomNumber(578, 707), myUtils.getRandomNumber(410, 460))
+            myUtils.sleepLittle()
+            adbshell.tap(myUtils.getRandomNumber(477, 701), myUtils.getRandomNumber(600, 641))
+            myUtils.sleepLittle()
+            adbshell.tap(myUtils.getRandomNumber(581, 701), myUtils.getRandomNumber(640, 641))
+            myUtils.sleepLittle()
             continue
 
+
+        if playWay.begin():
+            continue
         playPoint = findpic.getLoc(src_img, "./img/begin.png")
         if playPoint:
             printThis("开始战斗")
@@ -119,7 +107,7 @@ def beginGame():
         if playPoint:
             printThis("下一层")
             adbshell.tap(playPoint[0], playPoint[1])
-            sleepLittle()
+            myUtils.sleepLittle()
             continue
         playPoint = findpic.getLoc(src_img, "./img/again.png")
         if playPoint:
@@ -132,7 +120,7 @@ def beginGame():
         if playPoint:
             printThis("继续战斗")
             adbshell.tap(playPoint[0], playPoint[1])
-            sleepLong()
+            myUtils.sleepLong()
             continue
 
         playPoint = findpic.getLoc(src_img, "./img/zhandouzhunb.png")
@@ -140,74 +128,67 @@ def beginGame():
             printThis("战斗失败之后的战斗准备")
             countFail += 1
             adbshell.tap(playPoint[0], playPoint[1])
-            sleepLong()
+            myUtils.sleepLong()
             continue
 
         playPoint = findpic.getLoc(src_img, "./img/shi.png")
         if playPoint:
             printThis("确定出售的  是 按钮")
             adbshell.tap(playPoint[0], playPoint[1])
-            sleepLittle()
+            myUtils.sleepLittle()
             continue
-        if (isGet):
-            playPoint = findpic.getLoc(src_img, "./img/get.png")
-            if playPoint:
-                printThis("获得道具")
-                adbshell.tap(playPoint[0], playPoint[1])
-                sleepLittle()
-                continue
-        else:
-            playPoint = findpic.getLoc(src_img, "./img/chushou1.png")
-            if playPoint:
-                printThis("出售")
-                adbshell.tap(playPoint[0], playPoint[1])
-                sleepLittle()
-                continue
+        if playWay.isGetGoods():
+            continue
+        # if (isGet):
+        #     playPoint = findpic.getLoc(src_img, "./img/get.png")
+        #     if playPoint:
+        #         printThis("获得道具")
+        #         adbshell.tap(playPoint[0], playPoint[1])
+        #         myUtils.sleepLittle()
+        #         continue
+        # else:
+        #     playPoint = findpic.getLoc(src_img, "./img/chushou1.png")
+        #     if playPoint:
+        #         printThis("出售")
+        #         adbshell.tap(playPoint[0], playPoint[1])
+        #         myUtils.sleepLittle()
+        #         continue
 
         playPoint = findpic.getLoc(src_img, "./img/sure.png")
         if playPoint:
             printThis("确认")
             adbshell.tap(playPoint[0], playPoint[1])
-            sleepLittle()
+            myUtils.sleepLittle()
             continue
 
         playPoint = findpic.getLoc(src_img, "./img/shengli.png")
         if playPoint:
             printThis("胜利")
-            adbshell.tap(getRandomNumber(500, 600), getRandomNumber(60, 500))
-            sleepLittle()
-            adbshell.tap(getRandomNumber(500, 600), getRandomNumber(60, 500))
-            sleepLittle()
+            adbshell.tap(myUtils.getRandomNumber(500, 600), myUtils.getRandomNumber(60, 500))
+            myUtils.sleepLittle()
+            adbshell.tap(myUtils.getRandomNumber(500, 600), myUtils.getRandomNumber(60, 500))
+            myUtils.sleepLittle()
             continue
 
         playPoint = findpic.getLoc(src_img, "./img/shibai.png")
         if playPoint:
             printThis("游戏失败 重开")
-            adbshell.tap(getRandomNumber(700, 930), getRandomNumber(430, 500))
-            sleepLittle()
+            adbshell.tap(myUtils.getRandomNumber(700, 930), myUtils.getRandomNumber(430, 500))
+            myUtils.sleepLittle()
             continue
 
         if (time.time() - game_begin_agein > out_time):
             exitPrint("游戏超时")
 
         print("随便点击一下")
-        adbshell.tap(getRandomNumber(300, 800), getRandomNumber(600, 700))
-        sleepLong()
+        adbshell.tap(myUtils.getRandomNumber(300, 800), myUtils.getRandomNumber(600, 700))
+        myUtils.sleepLong()
         pass
 
 
 tk = Tk()
 tk.title("魔灵")
 isBengin = False
-
-
-# tk.geometry("400x400")
-# tk.resizable(False, False)
-
-
-def close():
-    time.sleep(3)
-    tk.quit()
 
 
 def createLabelAndEntry(labelText):
@@ -262,35 +243,37 @@ def crtateBtn():
 
 
 def clickHuoshan2():
-    global isGet
+    global playWay
     eSV1.set("45")
     eSV3.set("10")
-    isGet = False
+    playWay = PlayGouLiang(src_img)
 
 
 def clickHuoshan3():
-    global isGet
+    global playWay
     eSV1.set("45")
     eSV3.set("22")
-    isGet = False
+    playWay = PlayGouLiang(src_img)
+
 
 
 def clickHuoshan4():
-    global isGet
+    global playWay
     eSV1.set("45")
     eSV3.set("50")
-    isGet = False
+    playWay = PlayGouLiang(src_img)
+
 
 
 def clickJuren():
-    global isGet
-    isGet = True
+    global playWay
+    playWay = PlayLong(src_img)
     eSV1.set("180")
 
 
 def clickLong():
-    global isGet
-    isGet = True
+    global playWay
+    playWay = PlayLong(src_img)
     eSV1.set("240")
 
 

@@ -43,6 +43,9 @@ from matplotlib import pyplot as plt
 import time
 import datetime
 
+def takeSecond(pt):
+    return pt[0]
+
 def cleanSet(pointSet, newSet):
     if pointSet:
         point = pointSet.pop()
@@ -56,13 +59,14 @@ def cleanSet(pointSet, newSet):
     pointSet -= removeSet
     cleanSet(pointSet, newSet)
 
+
 t = time.time()
 nowTime = int(round(t * 1000))
 # print (nowTime);
 
-img_rgb = cv2.imread('13.png')
+img_rgb = cv2.imread('12.png')
 img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
-template = cv2.imread('shuangxin.png', 0)
+template = cv2.imread('dengji1.png', 0)
 w, h = template.shape[::-1]
 
 res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
@@ -81,16 +85,16 @@ newSet = set()
 cleanSet(pointSet, newSet)
 # print(count)
 
-print(newSet)
-print(len(newSet))
+newList = list(newSet)
+newList.sort(key=takeSecond)
+print(newList)
+print(len(newList))
 
 t = time.time()
 nowTime1 = int(round(t * 1000))
-print (nowTime1-nowTime);
+print(nowTime1 - nowTime);
 
 cv2.imwrite('111111.png', img_rgb)
-
-
 
 
 
