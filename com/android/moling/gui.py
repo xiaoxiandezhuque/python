@@ -31,7 +31,9 @@ countFail = 0  # 失败次数
 
 out_time = 900
 game_begin_agein = 0
+src_img = "%s/img/1.png" % os.getcwd()
 
+playWay = PlayLong(src_img)
 
 def countGame():
     global count, all, game_begin_agein, sleepTime
@@ -55,8 +57,7 @@ def exitPrint(content):
 def beginGame():
     global count, all, countMoney, allMoney, countFail, out_time, game_begin_agein, isBengin, playWay,src_img
     # 判断链接设备
-    src_img = "%s/img/1.png" % os.getcwd()
-    playWay = PlayLong(src_img)
+
     machine = os.popen("adb devices")
     machineStr = machine.read()
     setLabelText(count, countFail, countMoney, machineStr)
@@ -274,7 +275,7 @@ def clickJuren():
 def clickLong():
     global playWay
     playWay = PlayLong(src_img)
-    eSV1.set("240")
+    eSV1.set("180")
 
 
 def clickSave():
@@ -286,13 +287,14 @@ def clickSave():
 
 
 def clickBegin():
-    global isBengin
+    global isBengin,playWay,src_img
     if (eSV1.get() and eSV2.get() and eSV3.get() and eSV4.get()):
         lb.delete(0, END)  # 清空列表
         setLabelText(0, 0, 0, "开始了")
         btn_begin['bg'] = "red"
         btn_end['bg'] = "white"
         clickSave()
+
         isBengin = True
         tThread = threading.Thread(target=beginGame)
         tThread.setDaemon(True)
@@ -304,7 +306,7 @@ def clickEnd():
 
 
 def setDefult():
-    eSV1.set("200")
+    eSV1.set("180")
     eSV2.set("4")
     eSV3.set("220")
     eSV4.set("900")
