@@ -5,7 +5,7 @@ from com.android import findpic
 
 
 def saveScreenshot(name):
-    os.system("adb -s 127.0.0.1:62025 shell screencap -p /sdcard/%s" % name)  # 截屏
+    os.system("adb -s 127.0.0.1:62025 shell screencap -p /mnt/shared/Image/%s" % name)  # 截屏
     # os.system(r"adb pull /sdcard/%s C:\work\python\com\android\moling\img" % name)  # 导出图片
     os.system(r"adb -s 127.0.0.1:62025 pull /sdcard/%s %s\img" % (name, os.getcwd()))  # 导出图片
 
@@ -20,8 +20,11 @@ if __name__ == "__main__":
     #  kill    force-stop
     #  先返回home  在 kill
     # os.system("adb -s 127.0.0.1:62025  shell am kill com.netease.my")
-
-    saveScreenshot("13.png")
+    t1= time.time()
+    os.system("adb -s 127.0.0.1:62025 shell screencap -p /mnt/shared/Image/%s" % "1111.png")
+    # saveScreenshot("1111.png")
+    t2 = time.time()
+    print(int(round(t2 * 1000))-int(round(t1 * 1000)))
     # src_img = "./img/12.png"
     # playPoint = findpic.getLoc(src_img, "./dengji25.png")
     # if playPoint:

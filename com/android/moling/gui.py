@@ -33,6 +33,8 @@ out_time = 900
 game_begin_agein = 0
 src_img = "%s/img/1.png" % os.getcwd()
 
+
+gameState =0
 playWay = PlayLong(src_img)
 
 def countGame():
