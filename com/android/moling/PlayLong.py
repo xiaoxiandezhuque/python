@@ -10,6 +10,7 @@ class PlayLong:
 
     def begin(self):
 
+
         pass
 
     def isGetGoods(self):

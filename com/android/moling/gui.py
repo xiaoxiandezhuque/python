@@ -31,11 +31,16 @@ countFail = 0  # 失败次数
 
 out_time = 900
 game_begin_agein = 0
-src_img = "%s/img/1.png" % os.getcwd()
+src_img = r"C:\Users\xh\Nox_share\Image\1.png"
 
-
-gameState =0
+gameState = 0
 playWay = PlayLong(src_img)
+
+# 0 从礼物想获取  1 从商店购买
+getTili = 0
+
+isOpenGame = False
+
 
 def countGame():
     global count, all, game_begin_agein, sleepTime
@@ -57,7 +62,8 @@ def exitPrint(content):
 
 
 def beginGame():
-    global count, all, countMoney, allMoney, countFail, out_time, game_begin_agein, isBengin, playWay,src_img
+    global count, all, countMoney, allMoney, countFail, out_time, game_begin_agein, isBengin, playWay, src_img \
+        , getTili, isOpenGame
     # 判断链接设备
 
     machine = os.popen("adb devices")
@@ -69,33 +75,109 @@ def beginGame():
         exitPrint("还没连接到设备")
     # 获取当前的屏幕截图
     game_begin_agein = time.time()
+
     while True:
         if (not isBengin):
             return
         myUtils.saveScreenshot("1.png")
+        if not isOpenGame:
+            playPoint = findpic.getLoc(src_img, "./img/begin.png")
+            if playPoint:
+                isOpenGame = True
+                continue
+
+            playPoint = findpic.getLoc(src_img, "./img/moling.png")
+            if playPoint:
+                printThis("打开魔灵召唤")
+                adbshell.tap(playPoint[0], playPoint[1])
+                time.sleep(60)
+                continue
+
+            playPoint = findpic.getLoc(src_img, "./img/molingzhaohuan.png")
+            if playPoint:
+                printThis("找到进入游戏的页面")
+                adbshell.tap(myUtils.getRandomNumber(300, 800), myUtils.getRandomNumber(600, 700))
+                myUtils.sleepLittle()
+                adbshell.tapKey(4)
+                myUtils.sleepLittle()
+                adbshell.tapKey(4)
+                myUtils.sleepLittle()
+                adbshell.tapKey(4)
+                myUtils.sleepLittle()
+                continue
+            playPoint = findpic.getLoc(src_img, "./img/fou.png")
+            if playPoint:
+                printThis("点击是否退出 的 否")
+                adbshell.tap(playPoint[0], playPoint[1])
+                myUtils.sleepLittle()
+                continue
+
+            playPoint = findpic.getLoc(src_img, "./img/play.png")
+            if playPoint:
+                printThis("去刷龙10")
+                adbshell.tap(myUtils.getRandomNumber(692, 746), myUtils.getRandomNumber(630, 683))
+                myUtils.sleepLittle()
+                adbshell.tap(myUtils.getRandomNumber(635, 765), myUtils.getRandomNumber(570, 640))
+                myUtils.sleepLittle()
+                continue
+
+            playPoint = findpic.getLoc(src_img, "./img/long10.png")
+            if playPoint:
+                printThis("找战斗按钮")
+                adbshell.tap(myUtils.getRandomNumber(1027, 1100), playPoint[1])
+                myUtils.sleepLittle()
+                continue
+
+            playPoint = findpic.getLoc(src_img, "./img/long.png")
+            if playPoint:
+                printThis("龙 地下城")
+                adbshell.tap(playPoint[0], playPoint[1])
+                myUtils.sleepLong()
+                continue
+            pass
+
         playPoint = findpic.getLoc(src_img, "./img/dakaishangdian.png")
         if playPoint:
             printThis("打开商店   购买体力")
-            count -= 1
-            countMoney += 1
-            if countMoney > allMoney:
-                exitPrint("不能再买体力了 兄弟")
-                return
+            if getTili == 0:
+                adbshell.tap(myUtils.getRandomNumber(670, 849), myUtils.getRandomNumber(416, 474))
+                myUtils.sleepLittle()
+                myUtils.saveScreenshot("1.png")
+                playPointChild = findpic.getLoc(src_img, "./img/shouqu.png")
+                if playPointChild:
+                    adbshell.tap(playPointChild[0], playPointChild[1])
+                    myUtils.sleepLittle()
+                    adbshell.tap(playPointChild[0], playPointChild[1])
+                    myUtils.sleepLittle()
+                    # 关闭保管箱
+                    adbshell.tap(myUtils.getRandomNumber(903, 939), myUtils.getRandomNumber(121, 152))
+                    myUtils.sleepLittle()
+                    continue
+                else:
+                    adbshell.tap(myUtils.getRandomNumber(903, 939), myUtils.getRandomNumber(121, 152))
+                    getTili = 1
+                    myUtils.sleepLittle()
+                    continue
+            else:
+                count -= 1
+                countMoney += 1
+                if countMoney > allMoney:
+                    exitPrint("不能再买体力了 兄弟")
+                    return
 
-            adbshell.tap(playPoint[0], playPoint[1])
-            myUtils.sleepLittle()
-            adbshell.tap(myUtils.getRandomNumber(444, 616), myUtils.getRandomNumber(266, 460))
-            myUtils.sleepLittle()
-            adbshell.tap(myUtils.getRandomNumber(455, 600), myUtils.getRandomNumber(416, 458))
-            myUtils.sleepLittle()
-            adbshell.tap(myUtils.getRandomNumber(578, 707), myUtils.getRandomNumber(410, 460))
-            myUtils.sleepLittle()
-            adbshell.tap(myUtils.getRandomNumber(477, 701), myUtils.getRandomNumber(600, 641))
-            myUtils.sleepLittle()
-            adbshell.tap(myUtils.getRandomNumber(581, 701), myUtils.getRandomNumber(640, 641))
-            myUtils.sleepLittle()
-            continue
-
+                adbshell.tap(playPoint[0], playPoint[1])
+                myUtils.sleepLittle()
+                adbshell.tap(myUtils.getRandomNumber(444, 616), myUtils.getRandomNumber(266, 460))
+                myUtils.sleepLittle()
+                adbshell.tap(myUtils.getRandomNumber(455, 600), myUtils.getRandomNumber(416, 458))
+                myUtils.sleepLittle()
+                adbshell.tap(myUtils.getRandomNumber(578, 707), myUtils.getRandomNumber(410, 460))
+                myUtils.sleepLittle()
+                adbshell.tap(myUtils.getRandomNumber(477, 701), myUtils.getRandomNumber(600, 641))
+                myUtils.sleepLittle()
+                adbshell.tap(myUtils.getRandomNumber(581, 701), myUtils.getRandomNumber(640, 641))
+                myUtils.sleepLittle()
+                continue
 
         if playWay.begin():
             continue
@@ -183,8 +265,8 @@ def beginGame():
         if (time.time() - game_begin_agein > out_time):
             exitPrint("游戏超时")
 
-        print("随便点击一下")
-        adbshell.tap(myUtils.getRandomNumber(300, 800), myUtils.getRandomNumber(600, 700))
+        # print("随便点击一下")
+        # adbshell.tap(myUtils.getRandomNumber(300, 800), myUtils.getRandomNumber(600, 700))
         myUtils.sleepLong()
         pass
 
@@ -259,13 +341,11 @@ def clickHuoshan3():
     playWay = PlayGouLiang(src_img)
 
 
-
 def clickHuoshan4():
     global playWay
     eSV1.set("45")
     eSV3.set("50")
     playWay = PlayGouLiang(src_img)
-
 
 
 def clickJuren():
@@ -282,14 +362,15 @@ def clickLong():
 
 def clickSave():
     global sleepTime, all, allMoney, out_time
-    sleepTime = int(eSV1.get())
+    # sleepTime = int(eSV1.get())
+    sleepTime = 10
     allMoney = int(eSV2.get())
     all = int(eSV3.get())
     out_time = int(eSV4.get())
 
 
 def clickBegin():
-    global isBengin,playWay,src_img
+    global isBengin, playWay, src_img
     if (eSV1.get() and eSV2.get() and eSV3.get() and eSV4.get()):
         lb.delete(0, END)  # 清空列表
         setLabelText(0, 0, 0, "开始了")
