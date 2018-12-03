@@ -31,7 +31,7 @@ countFail = 0  # 失败次数
 
 out_time = 900
 game_begin_agein = 0
-src_img = r"C:\Users\xh\Nox_share\Image\1.png"
+src_img = r"C:\Users\Administrator\Nox_share\Image\1.png"
 
 gameState = 0
 playWay = PlayLong(src_img)
@@ -262,11 +262,20 @@ def beginGame():
             myUtils.sleepLittle()
             continue
 
+        playPoint = findpic.getLoc(src_img, "./img/huidatohome.png")
+        if playPoint:
+            printThis("回答问题，去桌面关闭，重开")
+            adbshell.tapKey(3)
+            os.system("adb -s 127.0.0.1:62025  shell am force-stop com.com2us.smon.normal.freefull.google.kr.android.common")
+            isOpenGame = False
+            myUtils.sleepLittle()
+            continue
+
         if (time.time() - game_begin_agein > out_time):
             exitPrint("游戏超时")
 
-        # print("随便点击一下")
-        # adbshell.tap(myUtils.getRandomNumber(300, 800), myUtils.getRandomNumber(600, 700))
+        print("随便点击一下")
+        adbshell.tap(myUtils.getRandomNumber(300, 800), myUtils.getRandomNumber(600, 700))
         myUtils.sleepLong()
         pass
 
@@ -362,8 +371,8 @@ def clickLong():
 
 def clickSave():
     global sleepTime, all, allMoney, out_time
-    # sleepTime = int(eSV1.get())
-    sleepTime = 10
+    sleepTime = int(eSV1.get())
+    # sleepTime = 10
     allMoney = int(eSV2.get())
     all = int(eSV3.get())
     out_time = int(eSV4.get())
