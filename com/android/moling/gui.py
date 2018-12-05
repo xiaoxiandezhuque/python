@@ -31,7 +31,7 @@ countFail = 0  # 失败次数
 
 out_time = 900
 game_begin_agein = 0
-src_img = r"C:\Users\Administrator\Nox_share\Image\1.png"
+src_img = r"C:\Users\xh\Nox_share\Image\1.png"
 
 gameState = 0
 playWay = PlayLong(src_img)
@@ -56,7 +56,8 @@ def exitPrint(content):
     setLabelText(count, countFail, countMoney, content)
     btn_begin['bg'] = "white"
     btn_end['bg'] = "red"
-    global isBengin
+    global isBengin,isOpenGame
+    isOpenGame = False
     isBengin = False
     # musicPlay.play()
 
@@ -91,6 +92,12 @@ def beginGame():
                 printThis("打开魔灵召唤")
                 adbshell.tap(playPoint[0], playPoint[1])
                 time.sleep(60)
+                continue
+            playPoint = findpic.getLoc(src_img, "./img/buzaitishi.png")
+            if playPoint:
+                printThis("关闭不再提示")
+                adbshell.tap(playPoint[0], playPoint[1])
+                myUtils.sleepLittle()
                 continue
 
             playPoint = findpic.getLoc(src_img, "./img/molingzhaohuan.png")
