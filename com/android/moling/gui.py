@@ -57,7 +57,7 @@ def exitPrint(content):
     btn_begin['bg'] = "white"
     btn_end['bg'] = "red"
     global isBengin,isOpenGame
-    isOpenGame = False
+    # isOpenGame = False
     isBengin = False
     # musicPlay.play()
 
@@ -253,6 +253,13 @@ def beginGame():
             myUtils.sleepLittle()
             continue
 
+        playPoint = findpic.getLoc(src_img, "./img/sure1.png")
+        if playPoint:
+            printThis("确认1")
+            adbshell.tap(playPoint[0], playPoint[1])
+            myUtils.sleepLittle()
+            continue
+
         playPoint = findpic.getLoc(src_img, "./img/shengli.png")
         if playPoint:
             printThis("胜利")
@@ -405,8 +412,8 @@ def clickEnd():
 
 
 def setDefult():
-    eSV1.set("180")
-    eSV2.set("4")
+    eSV1.set("110")
+    eSV2.set("10")
     eSV3.set("220")
     eSV4.set("900")
     setLabelText(0, 0, 0, "还没有开始")

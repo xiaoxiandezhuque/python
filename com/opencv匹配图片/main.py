@@ -64,13 +64,13 @@ t = time.time()
 nowTime = int(round(t * 1000))
 # print (nowTime);
 
-img_rgb = cv2.imread('12.png')
+img_rgb = cv2.imread('23.png')
 img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
-template = cv2.imread('dengji1.png', 0)
+template = cv2.imread('jizhong6.png', 0)
 w, h = template.shape[::-1]
 
 res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
-threshold = 0.8
+threshold = 0.85
 loc = np.where(res >= threshold)
 count = 0
 pointSet = set()
@@ -98,5 +98,5 @@ cv2.imwrite('111111.png', img_rgb)
 
 
 
-# a =Image.open("111111.png")
-# a.show()
+a =Image.open("111111.png")
+a.show()

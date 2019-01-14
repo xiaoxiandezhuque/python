@@ -74,7 +74,7 @@ def getAllLoc(srcimg, findimg):
     template = cv.imread(findimg, 0)
     w, h = template.shape[::-1]
     res = cv.matchTemplate(img_gray, template, cv.TM_CCOEFF_NORMED)
-    threshold = 0.8
+    threshold = 0.85
     loc = np.where(res >= threshold)
     pointSet = set()
 
@@ -98,9 +98,9 @@ def getAllLoc(srcimg, findimg):
         else:
             data = (round(random.uniform(pt[0], pt[0] + w), 5), round(random.uniform(pt[1], pt[1] + h), 5))
         dataSet.add(data)
-    dataList = list(dataSet)
-    dataList.sort(key=takeFirst)
-    return dataList
+    # dataList = list(dataSet)
+    # dataList.sort(key=takeFirst)
+    return dataSet
 
 
 # 模糊匹配，找到第一个匹配的点   用这个，有可能会失败
