@@ -412,7 +412,7 @@ def clickEnd():
 
 
 def setDefult():
-    eSV1.set("110")
+    eSV1.set("120")
     eSV2.set("10")
     eSV3.set("220")
     eSV4.set("900")
