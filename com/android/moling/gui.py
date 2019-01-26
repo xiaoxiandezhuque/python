@@ -31,7 +31,7 @@ countFail = 0  # 失败次数
 
 out_time = 900
 game_begin_agein = 0
-src_img = r"C:\Users\xh\Nox_share\Image\1.png"
+src_img = r"C:\Users\Administrator\Nox_share\Image\1.png"
 
 gameState = 0
 playWay = PlayLong(src_img)
