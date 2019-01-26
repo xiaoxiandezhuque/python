@@ -152,6 +152,9 @@ def beginGame():
                 myUtils.saveScreenshot("1.png")
                 playPointChild = findpic.getLoc(src_img, "./img/shouqu.png")
                 if playPointChild:
+                    if countMoney > allMoney:
+                        exitPrint("不能再买体力了 兄弟")
+                        continue
                     adbshell.tap(playPointChild[0], playPointChild[1])
                     myUtils.sleepLittle()
                     adbshell.tap(playPointChild[0], playPointChild[1])
@@ -167,10 +170,11 @@ def beginGame():
                     continue
             else:
                 count -= 1
-                countMoney += 1
                 if countMoney > allMoney:
                     exitPrint("不能再买体力了 兄弟")
-                    return
+                    continue
+
+                countMoney += 1
 
                 adbshell.tap(playPoint[0], playPoint[1])
                 myUtils.sleepLittle()
@@ -413,7 +417,7 @@ def clickEnd():
 
 def setDefult():
     eSV1.set("120")
-    eSV2.set("10")
+    eSV2.set("0")
     eSV3.set("220")
     eSV4.set("900")
     setLabelText(0, 0, 0, "还没有开始")

@@ -39,7 +39,7 @@ def cleanSet(pointSet, newSet):
 # a =Image.open("111111.png")
 # a.show()
 if __name__ == "__main__":
-
+    again  =0
     while True:
         os.system("adb -s 127.0.0.1:62001 shell screencap -p /mnt/shared/Image/%s" % "clear.png")
         allset = set()
@@ -69,6 +69,7 @@ if __name__ == "__main__":
                 allset = allset | findSet
                 break
         if (len(allset) > 0):
+            again=0
             a = allset.pop()
             adbshell.tap(a[0], a[1])
             myUtils.sleepLittle()
@@ -79,9 +80,12 @@ if __name__ == "__main__":
             adbshell.tap(myUtils.getRandomNumber(456, 581), myUtils.getRandomNumber(405, 453))
             myUtils.sleepLittle()
         else:
-            adbshell.swipe(myUtils.getRandomNumber(912, 1175), myUtils.getRandomNumber(550, 661),
-                           myUtils.getRandomNumber(912, 1175), myUtils.getRandomNumber(384, 421))
-            myUtils.sleepLittle()
+            adbshell.swipe(myUtils.getRandomNumber(912, 1175), myUtils.getRandomNumber(550, 580),
+                           myUtils.getRandomNumber(912, 1175), myUtils.getRandomNumber(384, 400))
+            myUtils.sleepLong()
+            if again >3:
+                exit()
+            again+=1
             print("滑动找下一页")
     # print(len(allset))
     # if len(allset) != 0:
