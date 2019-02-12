@@ -16,7 +16,8 @@ def takeSecond(elem):
 
 
 if __name__ == "__main__":
-    saveScreenshot("27.png")
+    # saveScreenshot("27.png")
+    os.system("adb -s 127.0.0.1:62001  shell am force-stop com.com2us.smon.normal.freefull.google.kr.android.common")
     # os.system("adb -s 127.0.0.1:62025  shell input keyevent  3" )
     # os.system("adb -s 127.0.0.1:62025  shell am force-stop com.sjyt.oilmanager")
     # os.system(r"adb -s 127.0.0.1:62025 pull /sdcard/%s %s\img" % ("123321.png", os.getcwd()))  # 导出图片
