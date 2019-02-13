@@ -56,7 +56,7 @@ def exitPrint(content):
     setLabelText(count, countFail, countMoney, content)
     btn_begin['bg'] = "white"
     btn_end['bg'] = "red"
-    global isBengin,isOpenGame
+    global isBengin, isOpenGame
     # isOpenGame = False
     isBengin = False
     # musicPlay.play()
@@ -82,10 +82,13 @@ def beginGame():
             return
         myUtils.saveScreenshot("1.png")
 
-
         playPoint = findpic.getLoc(src_img, "./img/dakaishangdian.png")
         if playPoint:
             printThis("打开商店   购买体力")
+            count -= 1
+            if countMoney > allMoney:
+                exitPrint("不能再买体力了 兄弟")
+                return
             if getTili == 0:
                 adbshell.tap(myUtils.getRandomNumber(670, 849), myUtils.getRandomNumber(416, 474))
                 myUtils.sleepLittle()
@@ -106,12 +109,7 @@ def beginGame():
                     myUtils.sleepLittle()
                     continue
             else:
-                count -= 1
                 countMoney += 1
-                if countMoney > allMoney:
-                    exitPrint("不能再买体力了 兄弟")
-                    return
-
                 adbshell.tap(playPoint[0], playPoint[1])
                 myUtils.sleepLittle()
                 adbshell.tap(myUtils.getRandomNumber(444, 616), myUtils.getRandomNumber(266, 460))
@@ -187,8 +185,6 @@ def beginGame():
                 myUtils.sleepLong()
                 continue
             pass
-
-
 
         if playWay.begin():
             continue
@@ -284,13 +280,23 @@ def beginGame():
         if playPoint:
             printThis("回答问题，去桌面关闭，重开")
             adbshell.tapKey(3)
-            os.system("adb -s 127.0.0.1:62001  shell am force-stop com.com2us.smon.normal.freefull.google.kr.android.common")
+            os.system(
+                "adb -s 127.0.0.1:62001  shell am force-stop com.com2us.smon.normal.freefull.google.kr.android.common")
             isOpenGame = False
             myUtils.sleepLittle()
+            continue
+        playPoint = findpic.getLoc(src_img, "./img/banbengengxing.png")
+        if playPoint:
+            printThis("版本更新的确定")
+            adbshell.tap(playPoint[0], playPoint[1])
+            time.sleep(60)
+            isOpenGame = False
             continue
 
         if (time.time() - game_begin_agein > out_time):
             exitPrint("游戏超时")
+
+
 
         print("随便点击一下")
         adbshell.tap(myUtils.getRandomNumber(300, 800), myUtils.getRandomNumber(600, 700))
