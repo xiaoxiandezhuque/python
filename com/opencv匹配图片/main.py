@@ -43,6 +43,9 @@ from matplotlib import pyplot as plt
 import time
 import datetime
 
+def takeSecond(pt):
+    return pt[0]
+
 def cleanSet(pointSet, newSet):
     if pointSet:
         point = pointSet.pop()
@@ -56,22 +59,23 @@ def cleanSet(pointSet, newSet):
     pointSet -= removeSet
     cleanSet(pointSet, newSet)
 
+
 t = time.time()
 nowTime = int(round(t * 1000))
-print (nowTime);
+# print (nowTime);
 
-img_rgb = cv2.imread('4.png')
+img_rgb = cv2.imread('23.png')
 img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
-template = cv2.imread('other1.png', 0)
+template = cv2.imread('jizhong6.png', 0)
 w, h = template.shape[::-1]
 
 res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
-threshold = 0.8
+threshold = 0.85
 loc = np.where(res >= threshold)
 count = 0
 pointSet = set()
 for pt in zip(*loc[::-1]):
-    cv2.rectangle(img_rgb, pt, (pt[0] + int(w/2), pt[1] + int(h/2)), (0, 0, 255), 2)
+    cv2.rectangle(img_rgb, pt, (pt[0] + int(w), pt[1] + int(h)), (0, 0, 255), 2)
     count += 1
     pointSet.add(pt)
     # print(pt)
@@ -81,16 +85,16 @@ newSet = set()
 cleanSet(pointSet, newSet)
 # print(count)
 
-print(newSet)
-print(len(newSet))
+newList = list(newSet)
+newList.sort(key=takeSecond)
+print(newList)
+print(len(newList))
 
 t = time.time()
 nowTime1 = int(round(t * 1000))
-print (nowTime1-nowTime);
+print(nowTime1 - nowTime);
 
 cv2.imwrite('111111.png', img_rgb)
-
-
 
 
 

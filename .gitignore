@@ -1,2 +1,6 @@
 .idea/
 venv2/
+com/__pycache__/
+com/android/__pycache__/
+venv/
+com/android/moling/__pycache__/
