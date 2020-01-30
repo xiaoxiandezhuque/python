@@ -2,7 +2,8 @@ import os
 import threading
 import time
 
-
-os.getcwd()
+machine = os.popen("adb devices")
+machineStr = machine.read()
+print(machineStr)
 
 

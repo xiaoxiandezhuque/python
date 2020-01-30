@@ -27,12 +27,12 @@ if __name__ == "__main__":
     # getHtml("https://www.baidu.com/")
     # http://www.zhlzw.com/UploadFiles/Article_UploadFiles/201204/20120412123923816.jpg
     # http://wapled.cn/images/91/1591/Compress_1%20(1).jpg?2018092012131312
-    num = 901
+    num = 473
     page = 1
-    duoshaohua = 10
+    duoshaohua = 7
     while True:
         # url = "http://wapled.cn/images/80/1188/Compress_1%20(%s).jpg?2018092012131312" % (num, page)
-        url = 'http://wapled.cn/images/60/' + str(num) + '/Compress_1%20(' + str(page) + ').jpg?2018092012131312'
+        url = 'http://wapled.cn/images/41/' + str(num) + '/Compress_1%20(' + str(page) + ').jpg?2018092012131312'
 
         html = session.get(url,
                            headers=headers)
