@@ -86,7 +86,7 @@ def beginGame():
         if playPoint:
             printThis("打开商店   购买体力")
             count -= 1
-            if countMoney > allMoney:
+            if countMoney >= allMoney:
                 exitPrint("不能再买体力了 兄弟")
                 return
             if getTili == 0:
@@ -167,7 +167,7 @@ def beginGame():
                 printThis("去刷龙10")
                 adbshell.tap(myUtils.getRandomNumber(692, 746), myUtils.getRandomNumber(630, 683))
                 myUtils.sleepLittle()
-                adbshell.tap(myUtils.getRandomNumber(635, 765), myUtils.getRandomNumber(570, 640))
+                adbshell.tap(myUtils.getRandomNumber(660, 765), myUtils.getRandomNumber(570, 640))
                 myUtils.sleepLittle()
                 continue
 
@@ -390,7 +390,7 @@ def clickJuren():
 def clickLong():
     global playWay
     playWay = PlayLong(src_img)
-    eSV1.set("80")
+    eSV1.set("70")
 
 
 def clickSave():
@@ -422,8 +422,8 @@ def clickEnd():
 
 
 def setDefult():
-    eSV1.set("80")
-    eSV2.set("10")
+    eSV1.set("70")
+    eSV2.set("0")
     eSV3.set("220")
     eSV4.set("900")
     setLabelText(0, 0, 0, "还没有开始")

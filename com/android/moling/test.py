@@ -6,8 +6,8 @@ from com.android import adbshell
 
 
 def saveScreenshot(name):
-    os.system("adb -s 127.0.0.1:62001 shell screencap -p /mnt/shared/Image/%s" % name)  # 截屏
-    # os.system(r"adb pull /sdcard/%s C:\work\python\com\android\moling\img" % name)  # 导出图片
+    os.system("adb  shell screencap -p /sdcard/%s" % name)  # 截屏
+    os.system(r"adb pull /sdcard/%s C:\work\python\com\android\moling\img" % name)  # 导出图片
     # os.system(r"adb -s 127.0.0.1:62001 pull /sdcard/%s %s\img" % (name, os.getcwd()))  # 导出图片
 
 
