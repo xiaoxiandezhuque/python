@@ -4,11 +4,17 @@ import time
 from com.android import findpic
 from com.android import adbshell
 
+<<<<<<< HEAD
+machine = os.popen("adb devices")
+machineStr = machine.read()
+print(machineStr)
+=======
 
 def saveScreenshot(name):
     os.system("adb  shell screencap -p /sdcard/%s" % name)  # 截屏
     os.system(r"adb pull /sdcard/%s C:\work\python\com\android\moling\img" % name)  # 导出图片
     # os.system(r"adb -s 127.0.0.1:62001 pull /sdcard/%s %s\img" % (name, os.getcwd()))  # 导出图片
+>>>>>>> 97e3d1653566fe09268b3070c0ad57991c6a43a4
 
 
 def takeSecond(elem):

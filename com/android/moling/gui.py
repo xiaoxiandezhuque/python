@@ -13,6 +13,26 @@ from com.android.moling.PlayLong import PlayLong
 isGet = True
 
 
+<<<<<<< HEAD
+def saveScreenshot(name):
+    os.system("adb  shell screencap -p /sdcard/%s" % name)  # 截屏
+    os.system(r"adb  pull /sdcard/%s %s/img" % (name, os.getcwd()))  # 导出图片
+
+
+def sleepLittle():
+    time.sleep(random.randrange(2000, 3000) / 1000)
+
+
+def sleepLong():
+    time.sleep(random.randrange(5000, 10000) / 1000)
+
+
+def getRandomNumber(fromNum, toNum):
+    return round(random.uniform(fromNum, toNum), 5)
+
+
+=======
+>>>>>>> 97e3d1653566fe09268b3070c0ad57991c6a43a4
 def printThis(str):
     lb.insert(END, str)
     print(str)
@@ -54,10 +74,16 @@ def countGame():
 
 def exitPrint(content):
     setLabelText(count, countFail, countMoney, content)
+<<<<<<< HEAD
+    btn_begin['bg'] = "#ffffff"
+    btn_end['bg'] = "#ff0000"
+    global isBengin
+=======
     btn_begin['bg'] = "white"
     btn_end['bg'] = "red"
     global isBengin, isOpenGame
     # isOpenGame = False
+>>>>>>> 97e3d1653566fe09268b3070c0ad57991c6a43a4
     isBengin = False
     # musicPlay.play()
 
